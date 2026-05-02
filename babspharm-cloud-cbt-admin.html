@@ -709,13 +709,21 @@ function toast(msg, type = '') {
 }
 function getPassword() { return localStorage.getItem('bbc_admin_password') || 'admin123'; }
 
-function doAdminLogin() {
+async function doAdminLogin() {
   const pw = document.getElementById('inp-password').value;
   if (pw === getPassword()) {
     document.getElementById('login-err').style.display = 'none';
     document.getElementById('inp-password').value = '';
-    loadDashboard(); showScreen('dashboard');
-  } else { document.getElementById('login-err').style.display = 'block'; }
+    showScreen('dashboard');
+    document.getElementById('exam-list').innerHTML = '<div style="text-align:center;padding:30px;color:var(--muted);">Loading...</div>';
+    try {
+      await loadDashboard();
+    } catch(e) {
+      document.getElementById('exam-list').innerHTML = '<div style="text-align:center;padding:30px;color:var(--danger);">⚠️ Could not load data. Check your internet connection.</div>';
+    }
+  } else {
+    document.getElementById('login-err').style.display = 'block';
+  }
 }
 function doLogout() { showScreen('login'); document.getElementById('inp-password').value = ''; }
 function changePassword() { openModal('modal-password'); }
@@ -737,6 +745,13 @@ async function loadDashboard() {
   document.getElementById('stat-courses').textContent=exams.length;
   document.getElementById('stat-questions').textContent=totalQ;
   document.getElementById('stat-duration').textContent=totalD+' min';
+  // Update pending badge
+  try {
+    const students = await getStudents();
+    const pending = students.filter(s=>s.status==='pending').length;
+    const badge = document.getElementById('pending-badge');
+    if (badge) { badge.textContent=pending; badge.style.display=pending>0?'':'none'; }
+  } catch(e) {}
   const el=document.getElementById('exam-list'); el.innerHTML='';
   if (!exams.length){el.innerHTML=`<div class="empty-state"><div class="icon">📭</div><h3>No Courses Yet</h3><p>Click "Add Course" to create your first exam.</p></div>`;return;}
   exams.forEach(ex=>{
@@ -1190,17 +1205,6 @@ async function saveWhatsApp() {
 document.addEventListener('keydown', e => {
   if (e.key==='Enter' && document.getElementById('screen-login').classList.contains('active')) doAdminLogin();
 });
-
-// Show pending badge on dashboard load
-async function updatePendingBadge() {
-  const students = await getStudents();
-  const pending = students.filter(s=>s.status==='pending').length;
-  const badge = document.getElementById('pending-badge');
-  if (badge) { badge.textContent=pending; badge.style.display=pending>0?'':'none'; }
-}
-// Call after dashboard loads
-const _origLoad = loadDashboard;
-loadDashboard = async function() { await _origLoad(); await updatePendingBadge(); };
 loadDashboard = function() {
   _origLoadDashboard();
   const pending = getStudents().filter(s => s.status === 'pending').length;
