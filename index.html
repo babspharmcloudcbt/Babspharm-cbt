@@ -638,6 +638,138 @@
   .pending-note { background: rgba(200,155,0,0.07); border: 1px solid rgba(200,155,0,0.15); border-radius: 10px; padding: 14px; font-size: 0.82rem; color: var(--muted); line-height: 1.6; }
   .pending-note strong { color: var(--accent); }
 
+  /* === BOTTOM NAV === */
+  .bottom-nav {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background: rgba(255,253,240,0.97);
+    backdrop-filter: blur(16px);
+    border-top: 1px solid var(--border);
+    display: flex;
+    z-index: 200;
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  .bottom-nav.hidden { display: none; }
+  .nav-btn {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    padding: 10px 4px 8px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--muted);
+    font-family: var(--font-body);
+    font-size: 0.6rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    transition: color 0.2s;
+  }
+  .nav-btn .nav-icon { font-size: 1.3rem; line-height: 1; }
+  .nav-btn.active { color: var(--accent); }
+  .nav-btn.active .nav-icon { transform: scale(1.1); }
+
+  /* === LOADING SKELETONS === */
+  .skeleton {
+    background: linear-gradient(90deg, #f0e8c0 25%, #fff8d0 50%, #f0e8c0 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.4s infinite;
+    border-radius: 8px;
+  }
+  @keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+  .skel-card { height: 90px; border-radius: var(--radius); margin-bottom: 12px; }
+  .skel-stat { height: 70px; border-radius: var(--radius); }
+
+  /* === ACCESS CODE MODAL === */
+  .access-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    backdrop-filter: blur(6px);
+    z-index: 500;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .access-overlay.open { display: flex; }
+  .access-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 32px 28px;
+    width: 100%;
+    max-width: 380px;
+    text-align: center;
+    box-shadow: var(--glow), 0 20px 50px rgba(0,0,0,0.15);
+  }
+  .access-card h3 { font-family: var(--font-head); font-size: 1.1rem; font-weight: 800; margin-bottom: 6px; }
+  .access-card p  { color: var(--muted); font-size: 0.85rem; margin-bottom: 20px; }
+  .access-err { display: none; color: var(--danger); font-size: 0.8rem; margin-bottom: 10px; }
+
+  /* === STATS CHART === */
+  .chart-wrap { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; margin-bottom: 16px; }
+  .chart-title { font-family: var(--font-head); font-weight: 700; font-size: 0.82rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 14px; }
+  .bar-chart { display: flex; align-items: flex-end; gap: 8px; height: 80px; }
+  .bar-col { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+  .bar-fill { width: 100%; border-radius: 4px 4px 0 0; background: var(--accent); min-height: 4px; transition: height 0.5s ease; }
+  .bar-lbl { font-size: 0.6rem; color: var(--muted); text-align: center; font-family: var(--font-mono); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
+  .bar-val { font-size: 0.65rem; font-weight: 700; color: var(--accent); }
+
+  /* === RESULT HISTORY === */
+  .history-section { margin-bottom: 20px; }
+  .history-title { font-family: var(--font-head); font-weight: 700; font-size: 0.82rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 10px; }
+  .history-item {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 16px;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+  }
+  .history-item-info h4 { font-family: var(--font-head); font-size: 0.82rem; font-weight: 700; margin-bottom: 2px; }
+  .history-item-info p  { font-size: 0.72rem; color: var(--muted); }
+  .history-pct { font-family: var(--font-head); font-size: 1.1rem; font-weight: 800; }
+
+  /* === TABS FOR DASHBOARD === */
+  .dash-tabs { display: flex; gap: 0; border-bottom: 2px solid var(--border); margin-bottom: 16px; }
+  .dash-tab { background: none; border: none; padding: 10px 18px; font-family: var(--font-head); font-size: 0.82rem; font-weight: 700; color: var(--muted); cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px; transition: all 0.2s; }
+  .dash-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+  .dash-tab-panel { display: none; }
+  .dash-tab-panel.active { display: block; }
+
+  /* === PUSH NOTIFICATION BANNER === */
+  .notif-banner {
+    background: linear-gradient(135deg, rgba(200,155,0,0.12), rgba(255,220,0,0.08));
+    border: 1px solid rgba(200,155,0,0.3);
+    border-radius: 10px;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 14px;
+    font-size: 0.82rem;
+  }
+  .notif-banner button { margin-left: auto; flex-shrink: 0; }
+
+  /* Padding for bottom nav */
+  .has-bottom-nav { padding-bottom: 70px; }
+
+/* === CONFETTI === */
+#confetti-canvas {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 9999;
+}
+
   /* === RESPONSIVE === */
   @media (max-width: 700px) {
     .exam-body { grid-template-columns: 1fr; }
@@ -654,7 +786,7 @@
   ::-webkit-scrollbar-track { background: transparent; }
   ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
 </style>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 </head>
 <body>
 
@@ -759,48 +891,95 @@
   </div>
 </div>
 
+<canvas id="confetti-canvas"></canvas>
+
+<!-- ===========================
+     ACCESS CODE OVERLAY
+=========================== -->
+<div class="access-overlay" id="access-overlay">
+  <div class="access-card">
+    <div style="font-size:2rem;margin-bottom:10px;">🔐</div>
+    <h3>Enter Access Code</h3>
+    <p>This exam requires an access code from your admin to begin.</p>
+    <div class="access-err" id="access-err">❌ Incorrect code. Try again.</div>
+    <input type="text" id="access-code-input" placeholder="Enter access code" style="text-align:center;font-size:1.1rem;letter-spacing:0.15em;font-family:var(--font-mono);margin-bottom:12px;" oninput="document.getElementById('access-err').style.display='none'"/>
+    <button class="btn btn-primary" style="width:100%;" onclick="verifyAccessCode()">Unlock Exam →</button>
+    <button class="btn btn-ghost" style="width:100%;margin-top:8px;" onclick="document.getElementById('access-overlay').classList.remove('open')">Cancel</button>
+  </div>
+</div>
+
+<!-- ===========================
+     BOTTOM NAVIGATION
+=========================== -->
+<div class="bottom-nav hidden" id="bottom-nav">
+  <button class="nav-btn active" id="nav-exams" onclick="switchDashTab('exams',this)">
+    <span class="nav-icon">📋</span>Exams
+  </button>
+  <button class="nav-btn" id="nav-history" onclick="switchDashTab('history',this)">
+    <span class="nav-icon">📊</span>History
+  </button>
+  <button class="nav-btn" id="nav-profile" onclick="switchDashTab('profile',this)">
+    <span class="nav-icon">👤</span>Profile
+  </button>
+</div>
+
 <!-- ===========================
      SCREEN 2: DASHBOARD
 =========================== -->
 <div id="screen-dashboard" class="screen">
   <div class="topbar">
     <div class="logo">BABSPHARM<span> CLOUD</span></div>
-    <div style="display:flex;align-items:center;gap:12px;">
-      <span id="dash-user-name" style="font-size:0.85rem;color:var(--muted)"></span>
-      <button class="btn btn-outline" style="padding:7px 14px;font-size:0.8rem;" onclick="doLogout()">Logout</button>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <span id="dash-user-name" style="font-size:0.82rem;color:var(--muted);max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"></span>
     </div>
   </div>
   <div class="dash-hero">
-    <h2>Welcome back, <span id="dash-greeting">Student</span>!</h2>
-    <p>Select an exam below to begin your test session.</p>
+    <h2>Welcome, <span id="dash-greeting">Student</span>! 👋</h2>
+    <p>Your CBT portal — take exams, track your progress.</p>
   </div>
-  <div class="dash-body">
-    <div class="dash-grid">
-      <div class="stat-card">
-        <div class="stat-icon blue">📋</div>
-        <div>
-          <div class="stat-label">Exams Taken</div>
-          <div class="stat-val" id="stat-taken">0</div>
-        </div>
+  <div class="dash-body has-bottom-nav">
+
+    <!-- NOTIFICATION PROMPT -->
+    <div class="notif-banner" id="notif-banner" style="display:none;">
+      <span>🔔</span>
+      <span>Get notified when new exams are published</span>
+      <button class="btn btn-primary" style="padding:6px 12px;font-size:0.75rem;" onclick="requestNotifPermission()">Enable</button>
+    </div>
+
+    <!-- TAB: EXAMS -->
+    <div class="dash-tab-panel active" id="tab-exams">
+      <div class="dash-grid" id="stat-grid">
+        <div class="stat-card"><div class="stat-icon blue">📋</div><div><div class="stat-label">Exams Taken</div><div class="stat-val" id="stat-taken">—</div></div></div>
+        <div class="stat-card"><div class="stat-icon gold">🏆</div><div><div class="stat-label">Best Score</div><div class="stat-val" id="stat-best">—</div></div></div>
+        <div class="stat-card"><div class="stat-icon purple">⏱</div><div><div class="stat-label">Avg. Time</div><div class="stat-val" id="stat-time">—</div></div></div>
       </div>
-      <div class="stat-card">
-        <div class="stat-icon gold">🏆</div>
-        <div>
-          <div class="stat-label">Best Score</div>
-          <div class="stat-val" id="stat-best">—</div>
-        </div>
+      <div class="section-title">Available Exams</div>
+      <div class="exam-list" id="exam-list"></div>
+    </div>
+
+    <!-- TAB: HISTORY & STATS -->
+    <div class="dash-tab-panel" id="tab-history">
+      <div class="chart-wrap" id="score-chart-wrap" style="display:none;">
+        <div class="chart-title">📈 Your Score History</div>
+        <div class="bar-chart" id="score-chart"></div>
       </div>
-      <div class="stat-card">
-        <div class="stat-icon purple">⏱</div>
-        <div>
-          <div class="stat-label">Avg. Time Used</div>
-          <div class="stat-val" id="stat-time">—</div>
-        </div>
+      <div class="history-section">
+        <div class="history-title">Past Results</div>
+        <div id="history-list"></div>
       </div>
     </div>
 
-    <div class="section-title">Available Exams</div>
-    <div class="exam-list" id="exam-list"></div>
+    <!-- TAB: PROFILE -->
+    <div class="dash-tab-panel" id="tab-profile">
+      <div class="auth-card" style="margin-bottom:16px;">
+        <h2 style="font-size:1rem;margin-bottom:14px;">👤 My Profile</h2>
+        <div class="field"><label>Full Name</label><input type="text" id="prof-name" placeholder="Your full name"/></div>
+        <div class="field"><label>Gmail</label><input type="email" id="prof-email" readonly style="opacity:0.6;cursor:not-allowed;"/></div>
+        <div class="field"><label>New Password (leave blank to keep current)</label><input type="password" id="prof-pw" placeholder="Enter new password"/></div>
+        <button class="btn btn-primary" style="width:100%;" onclick="saveProfile()">💾 Save Changes</button>
+      </div>
+      <button class="btn btn-outline" style="width:100%;" onclick="doLogout()">🚪 Logout</button>
+    </div>
   </div>
 </div>
 
@@ -976,8 +1155,7 @@
 // ============================
 const SUPABASE_URL = 'https://rbmrffsllhyvkuwldkzn.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_cHifR1y1E9HuCg-8LN-B3A_hkMVd6sn';
-const { createClient } = supabase;
-const db = createClient(SUPABASE_URL, SUPABASE_KEY);
+const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 // ============================
 // STATE
@@ -1002,6 +1180,9 @@ function showScreen(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById('screen-' + id).classList.add('active');
   window.scrollTo(0, 0);
+  // Hide bottom nav on exam/results screens
+  const hideOn = ['exam','results','instructions'];
+  showBottomNav(!hideOn.includes(id) && state.user !== null);
 }
 
 function setLoading(btnId, loading, label) {
@@ -1124,23 +1305,83 @@ function doLogout() {
 }
 
 // ============================
+// BOTTOM NAV & TABS
+// ============================
+function showBottomNav(show) {
+  document.getElementById('bottom-nav').classList.toggle('hidden', !show);
+}
+
+function switchDashTab(tab, btn) {
+  ['exams','history','profile'].forEach(t => {
+    document.getElementById('tab-'+t).classList.toggle('active', t===tab);
+  });
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  if (tab === 'history') renderHistory();
+  if (tab === 'profile') loadProfile();
+}
+
+// ============================
+// PUSH NOTIFICATIONS
+// ============================
+function checkNotifPermission() {
+  if (!('Notification' in window)) return;
+  if (Notification.permission === 'default') {
+    document.getElementById('notif-banner').style.display = 'flex';
+  }
+}
+
+function requestNotifPermission() {
+  Notification.requestPermission().then(perm => {
+    document.getElementById('notif-banner').style.display = 'none';
+    if (perm === 'granted') toast('🔔 Notifications enabled!');
+  });
+}
+
+function sendNotif(title, body) {
+  if (Notification.permission === 'granted') {
+    new Notification(title, { body, icon: '📚' });
+  }
+}
+
+// ============================
 // DASHBOARD
 // ============================
 async function loadDashboard() {
   const u = state.user;
   document.getElementById('dash-greeting').textContent = u.name.split(' ')[0];
   document.getElementById('dash-user-name').textContent = u.name;
+  showBottomNav(true);
+  checkNotifPermission();
+
+  // Skeleton loaders
+  const el = document.getElementById('exam-list');
+  const statGrid = document.getElementById('stat-grid');
+  statGrid.innerHTML = `
+    <div class="skeleton skel-stat"></div>
+    <div class="skeleton skel-stat"></div>
+    <div class="skeleton skel-stat"></div>`;
+  el.innerHTML = `
+    <div class="skeleton skel-card"></div>
+    <div class="skeleton skel-card"></div>
+    <div class="skeleton skel-card"></div>`;
 
   // Load results for this student
   const { data: hist } = await db.from('results')
     .select('*').eq('student_email', u.email).order('date', { ascending: false });
   state.history = hist || [];
 
+  // Restore stat grid
+  statGrid.innerHTML = `
+    <div class="stat-card"><div class="stat-icon blue">📋</div><div><div class="stat-label">Exams Taken</div><div class="stat-val" id="stat-taken">0</div></div></div>
+    <div class="stat-card"><div class="stat-icon gold">🏆</div><div><div class="stat-label">Best Score</div><div class="stat-val" id="stat-best">—</div></div></div>
+    <div class="stat-card"><div class="stat-icon purple">⏱</div><div><div class="stat-label">Avg. Time</div><div class="stat-val" id="stat-time">—</div></div></div>`;
+
   document.getElementById('stat-taken').textContent = state.history.length;
   if (state.history.length > 0) {
     const best = Math.max(...state.history.map(h => h.pct));
     document.getElementById('stat-best').textContent = best + '%';
-    const avgMin = Math.round(state.history.reduce((s,h) => s + (h.time_used||0), 0) / state.history.length / 60);
+    const avgMin = Math.round(state.history.reduce((s,h) => s+(h.time_used||0),0) / state.history.length / 60);
     document.getElementById('stat-time').textContent = avgMin + ' min';
   } else {
     document.getElementById('stat-best').textContent = '—';
@@ -1148,8 +1389,6 @@ async function loadDashboard() {
   }
 
   // Load exams
-  const el = document.getElementById('exam-list');
-  el.innerHTML = '<div style="text-align:center;padding:30px;color:var(--muted);">Loading exams...</div>';
   const { data: exams } = await db.from('exams').select('*').order('created_at', { ascending: false });
   state.exams = exams || [];
 
@@ -1165,6 +1404,7 @@ async function loadDashboard() {
   state.exams.forEach(ex => {
     const taken = state.history.filter(h => h.exam_id === ex.id);
     const lastScore = taken.length ? taken[0].pct + '%' : null;
+    const hasCode = ex.access_code && ex.access_code.trim() !== '';
     el.innerHTML += `
       <div class="exam-card">
         <div class="exam-info">
@@ -1174,18 +1414,119 @@ async function loadDashboard() {
             <span class="badge">${ex.subject}</span>
             ${lastScore ? `<span class="badge green">Last: ${lastScore}</span>` : ''}
             <span class="badge gold">${ex.duration} mins</span>
+            ${hasCode ? `<span class="badge" style="background:rgba(220,38,38,.1);color:var(--danger);border-color:rgba(220,38,38,.2);">🔐 Code Required</span>` : ''}
           </div>
         </div>
-        <button class="btn btn-primary" style="flex-shrink:0;" onclick="openInstructions('${ex.id}')">Start Test →</button>
+        <button class="btn btn-primary" style="flex-shrink:0;" onclick="openInstructions('${ex.id}')">Start →</button>
       </div>`;
   });
 }
 
 // ============================
-// INSTRUCTIONS
+// RESULT HISTORY & STATS
 // ============================
+function renderHistory() {
+  const hist = state.history;
+  const listEl = document.getElementById('history-list');
+  const chartWrap = document.getElementById('score-chart-wrap');
+
+  if (!hist.length) {
+    listEl.innerHTML = `<div style="text-align:center;padding:40px 20px;color:var(--muted);">
+      <div style="font-size:2rem;margin-bottom:10px;">📭</div>
+      <div style="font-weight:700;">No results yet</div>
+      <div style="font-size:0.84rem;margin-top:5px;">Take an exam to see your history here.</div>
+    </div>`;
+    chartWrap.style.display = 'none';
+    return;
+  }
+
+  // Chart — last 8 results
+  chartWrap.style.display = '';
+  const recent = [...hist].reverse().slice(-8);
+  const maxPct = Math.max(...recent.map(r => r.pct), 1);
+  document.getElementById('score-chart').innerHTML = recent.map(r => {
+    const ex = state.exams.find(e => e.id === r.exam_id);
+    const shortName = ex ? ex.subject.slice(0,6) : 'Exam';
+    const h = Math.round((r.pct / 100) * 70);
+    const color = r.pct >= 70 ? '#16a34a' : r.pct >= 50 ? '#c89b00' : '#dc2626';
+    return `<div class="bar-col">
+      <div class="bar-val">${r.pct}%</div>
+      <div class="bar-fill" style="height:${h}px;background:${color};"></div>
+      <div class="bar-lbl">${shortName}</div>
+    </div>`;
+  }).join('');
+
+  // List
+  listEl.innerHTML = hist.map(r => {
+    const ex = state.exams.find(e => e.id === r.exam_id);
+    const name = ex ? ex.name : 'Unknown Exam';
+    const date = r.date ? new Date(r.date).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}) : '—';
+    const mins = r.time_used ? Math.round(r.time_used/60) : '—';
+    const color = r.pct >= 70 ? '#16a34a' : r.pct >= 50 ? '#c89b00' : '#dc2626';
+    return `<div class="history-item">
+      <div class="history-item-info">
+        <h4>${name}</h4>
+        <p>${date} · ${mins} min · ${r.score}/${r.total} correct</p>
+      </div>
+      <div class="history-pct" style="color:${color};">${r.pct}%</div>
+    </div>`;
+  }).join('');
+}
+
+// ============================
+// PROFILE
+// ============================
+function loadProfile() {
+  document.getElementById('prof-name').value  = state.user.name;
+  document.getElementById('prof-email').value = state.user.email;
+  document.getElementById('prof-pw').value    = '';
+}
+
+async function saveProfile() {
+  const name = document.getElementById('prof-name').value.trim();
+  const pw   = document.getElementById('prof-pw').value;
+  if (!name) { toast('Please enter your name',''); return; }
+  const update = { name };
+  if (pw.length >= 6) update.password = btoa(pw);
+  else if (pw.length > 0 && pw.length < 6) { toast('Password must be at least 6 characters',''); return; }
+  const { error } = await db.from('profiles').update(update).eq('id', state.user.id);
+  if (error) { toast('❌ Error: '+error.message,''); return; }
+  state.user.name = name;
+  document.getElementById('dash-greeting').textContent = name.split(' ')[0];
+  document.getElementById('dash-user-name').textContent = name;
+  toast('✅ Profile updated!');
+}
+
+// ============================
+// ACCESS CODE
+// ============================
+let _pendingExamId = null;
+
 function openInstructions(examId) {
   const ex = state.exams.find(e => e.id === examId);
+  _pendingExamId = examId;
+  // Check if exam has an access code
+  if (ex.access_code && ex.access_code.trim() !== '') {
+    document.getElementById('access-code-input').value = '';
+    document.getElementById('access-err').style.display = 'none';
+    document.getElementById('access-overlay').classList.add('open');
+    return;
+  }
+  loadInstructions(ex);
+}
+
+function verifyAccessCode() {
+  const ex = state.exams.find(e => e.id === _pendingExamId);
+  const entered = document.getElementById('access-code-input').value.trim();
+  if (entered === ex.access_code) {
+    document.getElementById('access-overlay').classList.remove('open');
+    loadInstructions(ex);
+  } else {
+    document.getElementById('access-err').style.display = 'block';
+  }
+}
+
+function loadInstructions(ex) {
   state.exam = ex;
   document.getElementById('instr-title').textContent = ex.name;
   document.getElementById('instr-subtitle').textContent = ex.subject;
@@ -1303,11 +1644,21 @@ function startTimer() {
     state.secondsLeft--;
     updateTimerDisplay();
     if (state.secondsLeft === 300) {
-      toast('⚠️ 5 minutes remaining! Please review your answers.');
+      toast('⚠️ 5 minutes remaining!');
+      sendNotif('⚠️ BABSPHARM CBT', '5 minutes remaining in your exam!');
+    }
+    if (state.secondsLeft === 60) {
+      toast('🚨 1 minute left! Submit now.');
     }
     if (state.secondsLeft <= 0) {
       clearInterval(state.timerInterval);
-      openModal('modal-timeout');
+      // AUTO SUBMIT — time is up
+      toast('⏰ Time is up! Submitting automatically...');
+      setTimeout(() => {
+        closeModal('modal-submit');
+        const timeUsed = Math.round((Date.now() - state.startTime) / 1000);
+        calcResults(timeUsed);
+      }, 1500);
     }
   }, 1000);
 }
@@ -1371,6 +1722,52 @@ async function calcResults(timeUsed) {
 }
 
 // ============================
+// CONFETTI
+// ============================
+function launchConfetti() {
+  const canvas = document.getElementById('confetti-canvas');
+  const ctx = canvas.getContext('2d');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  const pieces = [];
+  const colors = ['#c89b00','#ffd700','#16a34a','#f59e0b','#fff','#ff6b35','#00b4d8'];
+  for (let i = 0; i < 160; i++) {
+    pieces.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height - canvas.height,
+      w: Math.random() * 10 + 5,
+      h: Math.random() * 6 + 4,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      rotation: Math.random() * 360,
+      speed: Math.random() * 4 + 2,
+      rotSpeed: (Math.random() - 0.5) * 6,
+      drift: (Math.random() - 0.5) * 2
+    });
+  }
+
+  let frame = 0;
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    pieces.forEach(p => {
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.rotation * Math.PI / 180);
+      ctx.fillStyle = p.color;
+      ctx.fillRect(-p.w/2, -p.h/2, p.w, p.h);
+      ctx.restore();
+      p.y += p.speed;
+      p.x += p.drift;
+      p.rotation += p.rotSpeed;
+    });
+    frame++;
+    if (frame < 200) requestAnimationFrame(draw);
+    else ctx.clearRect(0, 0, canvas.width, canvas.height);
+  }
+  draw();
+}
+
+// ============================
 // RESULTS
 // ============================
 function showResults({ correct, wrong, skipped, pct, total }) {
@@ -1385,10 +1782,16 @@ function showResults({ correct, wrong, skipped, pct, total }) {
   let grade, cls;
   if (pct >= 70) { grade = '🏆 Excellent!'; cls = 'excellent'; }
   else if (pct >= 60) { grade = '✅ Good Pass'; cls = 'good'; }
-  else if (pct >= 50) { grade = '📘 Average'; cls = 'average'; }
+  else if (pct >= 50) { grade = '📘 Average Pass'; cls = 'average'; }
   else { grade = '❌ Below Pass'; cls = 'poor'; }
   gradeEl.textContent = grade;
   gradeEl.className = 'score-grade ' + cls;
+
+  // 🎉 Confetti on pass!
+  if (pct >= 50) {
+    setTimeout(() => launchConfetti(), 400);
+    sendNotif('🎉 BABSPHARM CBT', `You passed with ${pct}%! Well done!`);
+  }
 
   buildReview();
   document.getElementById('review-section').classList.remove('open');

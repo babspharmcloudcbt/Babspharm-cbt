@@ -317,6 +317,33 @@
   .import-status.ok  { background: rgba(16,185,129,0.1); border: 1px solid rgba(16,185,129,0.25); color: var(--success); }
   .import-status.err { background: rgba(239,68,68,0.1);  border: 1px solid rgba(239,68,68,0.25);  color: #fca5a5; }
 
+  /* === ACTIVITY LOG === */
+  .log-entry {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .log-entry:last-child { border-bottom: none; }
+  .log-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    margin-top: 5px;
+    flex-shrink: 0;
+  }
+  .log-dot.green  { background: var(--success); }
+  .log-dot.red    { background: var(--danger); }
+  .log-dot.gold   { background: var(--gold); }
+  .log-dot.blue   { background: var(--accent); }
+  .log-dot.muted  { background: var(--muted); }
+  .log-text { font-size: 0.82rem; line-height: 1.5; flex: 1; }
+  .log-text strong { font-weight: 600; }
+  .log-time { font-size: 0.7rem; color: var(--muted); font-family: var(--font-mono); flex-shrink: 0; }
+
+  .stat-card.green-card { border-left: 3px solid var(--success); }
+  .stat-card.red-card   { border-left: 3px solid var(--danger); }
+
   @media (max-width: 600px) {
     .field-row.col2, .field-row.col3 { grid-template-columns: 1fr; }
     .q-opts-preview { grid-template-columns: 1fr; }
@@ -326,7 +353,7 @@
   }
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 </head>
 <body>
 
@@ -389,6 +416,20 @@
           <div class="stat-val" id="stat-questions">0</div>
         </div>
       </div>
+      <div class="stat-card green-card">
+        <div class="stat-icon" style="background:rgba(22,163,74,.12);">👥</div>
+        <div>
+          <div class="stat-label">Total Students</div>
+          <div class="stat-val" id="stat-students">0</div>
+        </div>
+      </div>
+      <div class="stat-card red-card">
+        <div class="stat-icon" style="background:rgba(220,38,38,.1);">⏳</div>
+        <div>
+          <div class="stat-label">Pending Approval</div>
+          <div class="stat-val" id="stat-pending">0</div>
+        </div>
+      </div>
       <div class="stat-card">
         <div class="stat-icon purple">⏱</div>
         <div>
@@ -407,6 +448,17 @@
     </div>
 
     <div class="exam-list" id="exam-list"></div>
+
+    <!-- ACTIVITY LOG -->
+    <div style="margin-top:28px;">
+      <div class="section-header" style="margin-bottom:12px;">
+        <div class="section-title">📋 Recent Activity</div>
+        <button class="btn btn-sm btn-outline" onclick="clearLog()">🗑 Clear Log</button>
+      </div>
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px 20px;max-height:280px;overflow-y:auto;">
+        <div id="activity-log"><div style="text-align:center;padding:20px;color:var(--muted);font-size:0.84rem;">No activity yet.</div></div>
+      </div>
+    </div>
   </div>
 
   <!-- APPROVALS PANEL (hidden by default) -->
@@ -430,11 +482,12 @@
     </div>
 
     <!-- Filter tabs -->
-    <div style="display:flex;gap:6px;margin-bottom:14px;">
+    <div style="display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap;align-items:center;">
       <button class="btn btn-sm" id="af-all" onclick="filterApprovals('all')" style="background:rgba(200,155,0,.12);border:1px solid rgba(200,155,0,.25);color:var(--accent);">All</button>
       <button class="btn btn-sm btn-outline" id="af-pending" onclick="filterApprovals('pending')">⏳ Pending</button>
       <button class="btn btn-sm btn-outline" id="af-approved" onclick="filterApprovals('approved')">✅ Approved</button>
       <button class="btn btn-sm btn-outline" id="af-rejected" onclick="filterApprovals('rejected')">⛔ Rejected</button>
+      <button class="btn btn-sm btn-success" onclick="approveAllPending()" style="margin-left:auto;">✅ Approve All Pending</button>
     </div>
 
     <div id="approvals-list"></div>
@@ -496,6 +549,10 @@
         <label>Duration (minutes)</label>
         <input type="number" id="exam-f-duration" placeholder="e.g. 30" min="5" max="300" />
       </div>
+    </div>
+    <div class="field">
+      <label>Access Code (optional — leave blank for open access)</label>
+      <input type="text" id="exam-f-code" placeholder="e.g. PCY2024 (students must enter this to start)" style="font-family:var(--font-mono);letter-spacing:0.1em;"/>
     </div>
     <div class="modal-actions">
       <button class="btn btn-outline" onclick="closeModal('modal-exam')">Cancel</button>
@@ -678,8 +735,7 @@
 // ============================
 const SUPABASE_URL = 'https://rbmrffsllhyvkuwldkzn.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_cHifR1y1E9HuCg-8LN-B3A_hkMVd6sn';
-const { createClient } = supabase;
-const db = createClient(SUPABASE_URL, SUPABASE_KEY);
+const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 // ============================
 // EXAMS — Supabase
@@ -745,13 +801,20 @@ async function loadDashboard() {
   document.getElementById('stat-courses').textContent=exams.length;
   document.getElementById('stat-questions').textContent=totalQ;
   document.getElementById('stat-duration').textContent=totalD+' min';
-  // Update pending badge
+
+  // Load student counts
   try {
     const students = await getStudents();
-    const pending = students.filter(s=>s.status==='pending').length;
+    document.getElementById('stat-students').textContent = students.length;
+    const pendingCount = students.filter(s=>s.status==='pending').length;
+    document.getElementById('stat-pending').textContent = pendingCount;
     const badge = document.getElementById('pending-badge');
-    if (badge) { badge.textContent=pending; badge.style.display=pending>0?'':'none'; }
+    if (badge) { badge.textContent=pendingCount; badge.style.display=pendingCount>0?'':'none'; }
   } catch(e) {}
+
+  // Render activity log
+  renderLog();
+
   const el=document.getElementById('exam-list'); el.innerHTML='';
   if (!exams.length){el.innerHTML=`<div class="empty-state"><div class="icon">📭</div><h3>No Courses Yet</h3><p>Click "Add Course" to create your first exam.</p></div>`;return;}
   exams.forEach(ex=>{
@@ -761,10 +824,10 @@ async function loadDashboard() {
 }
 
 let _editExamId=null;
-function openAddExamModal(){_editExamId=null;document.getElementById('modal-exam-title').textContent='Add New Course';document.getElementById('exam-save-btn').textContent='Save Course';['exam-f-name','exam-f-subject','exam-f-duration'].forEach(id=>document.getElementById(id).value='');openModal('modal-exam');}
-async function openEditExamModal(examId){_editExamId=examId;const exams=await getExams();const ex=exams.find(e=>e.id===examId);document.getElementById('modal-exam-title').textContent='Edit Course';document.getElementById('exam-save-btn').textContent='Update Course';document.getElementById('exam-f-name').value=ex.name;document.getElementById('exam-f-subject').value=ex.subject;document.getElementById('exam-f-duration').value=ex.duration;openModal('modal-exam');}
-async function saveExam(){const name=document.getElementById('exam-f-name').value.trim(),subject=document.getElementById('exam-f-subject').value.trim(),duration=parseInt(document.getElementById('exam-f-duration').value);if(!name||!subject||!duration){toast('Fill all fields','error');return;}if(_editExamId===null){const{error}=await db.from('exams').insert({id:genId(),name,subject,duration,questions:0,questions_data:[]});if(error){toast('Error: '+error.message,'error');return;}toast('Course added!','success');}else{const{error}=await db.from('exams').update({name,subject,duration}).eq('id',_editExamId);if(error){toast('Error: '+error.message,'error');return;}toast('Course updated!','success');}closeModal('modal-exam');loadDashboard();}
-async function confirmDeleteExam(examId){const exams=await getExams();const ex=exams.find(e=>e.id===examId);document.getElementById('confirm-title').textContent='Delete Course';document.getElementById('confirm-msg').textContent=`Delete "${ex.name}"?`;document.getElementById('confirm-ok-btn').onclick=async()=>{await db.from('exams').delete().eq('id',examId);toast('Course deleted');closeModal('modal-confirm');loadDashboard();};openModal('modal-confirm');}
+function openAddExamModal(){_editExamId=null;document.getElementById('modal-exam-title').textContent='Add New Course';document.getElementById('exam-save-btn').textContent='Save Course';['exam-f-name','exam-f-subject','exam-f-duration','exam-f-code'].forEach(id=>document.getElementById(id).value='');openModal('modal-exam');}
+async function openEditExamModal(examId){_editExamId=examId;const exams=await getExams();const ex=exams.find(e=>e.id===examId);document.getElementById('modal-exam-title').textContent='Edit Course';document.getElementById('exam-save-btn').textContent='Update Course';document.getElementById('exam-f-name').value=ex.name;document.getElementById('exam-f-subject').value=ex.subject;document.getElementById('exam-f-duration').value=ex.duration;document.getElementById('exam-f-code').value=ex.access_code||'';openModal('modal-exam');}
+async function saveExam(){const name=document.getElementById('exam-f-name').value.trim(),subject=document.getElementById('exam-f-subject').value.trim(),duration=parseInt(document.getElementById('exam-f-duration').value),access_code=document.getElementById('exam-f-code').value.trim();if(!name||!subject||!duration){toast('Fill all fields','error');return;}if(_editExamId===null){const{error}=await db.from('exams').insert({id:genId(),name,subject,duration,questions:0,questions_data:[],access_code});if(error){toast('Error: '+error.message,'error');return;}addLog(`Created course: "${name}"`, 'green');toast('Course added!','success');}else{const{error}=await db.from('exams').update({name,subject,duration,access_code}).eq('id',_editExamId);if(error){toast('Error: '+error.message,'error');return;}addLog(`Updated course: "${name}"`, 'blue');toast('Course updated!','success');}closeModal('modal-exam');loadDashboard();}
+async function confirmDeleteExam(examId){const exams=await getExams();const ex=exams.find(e=>e.id===examId);document.getElementById('confirm-title').textContent='Delete Course';document.getElementById('confirm-msg').textContent=`Delete "${ex.name}"?`;document.getElementById('confirm-ok-btn').onclick=async()=>{await db.from('exams').delete().eq('id',examId);addLog(`Deleted course: "${ex.name}"`, 'red');toast('Course deleted');closeModal('modal-confirm');loadDashboard();};openModal('modal-confirm');}
 
 let _currentExamId=null;
 async function openQManager(examId){_currentExamId=examId;await loadQManager();showScreen('questions');}
@@ -774,8 +837,8 @@ function toggleQ(i){document.getElementById('qbody-'+i).classList.toggle('open')
 let _editQIdx=null;
 function openAddQModal(){_editQIdx=null;document.getElementById('modal-q-title').textContent='Add Question';document.getElementById('q-save-btn').textContent='Save Question';document.getElementById('q-f-text').value='';document.getElementById('q-f-exp').value='';['q-f-opt0','q-f-opt1','q-f-opt2','q-f-opt3'].forEach(id=>document.getElementById(id).value='');document.querySelectorAll('input[name="ans"]').forEach(r=>r.checked=false);openModal('modal-question');}
 async function openEditQModal(qIdx){_editQIdx=qIdx;const exams=await getExams();const q=exams.find(e=>e.id===_currentExamId).questions_data[qIdx];document.getElementById('modal-q-title').textContent='Edit Question';document.getElementById('q-save-btn').textContent='Update Question';document.getElementById('q-f-text').value=q.q;document.getElementById('q-f-exp').value=q.exp||'';q.opts.forEach((o,i)=>document.getElementById('q-f-opt'+i).value=o);document.querySelectorAll('input[name="ans"]').forEach(r=>r.checked=parseInt(r.value)===q.ans);openModal('modal-question');}
-async function saveQuestion(){const text=document.getElementById('q-f-text').value.trim();const opts=[0,1,2,3].map(i=>document.getElementById('q-f-opt'+i).value.trim());const ansEl=document.querySelector('input[name="ans"]:checked');const exp=document.getElementById('q-f-exp').value.trim();if(!text){toast('Enter question text','error');return;}if(opts.some(o=>!o)){toast('Fill all 4 options','error');return;}if(!ansEl){toast('Select correct answer','error');return;}const qObj={q:text,opts,ans:parseInt(ansEl.value),exp};const exams=await getExams();const ex=exams.find(e=>e.id===_currentExamId);if(!ex.questions_data)ex.questions_data=[];if(_editQIdx===null)ex.questions_data.push(qObj);else ex.questions_data[_editQIdx]=qObj;ex.questions=ex.questions_data.length;const{error}=await db.from('exams').update({questions_data:ex.questions_data,questions:ex.questions}).eq('id',_currentExamId);if(error){toast('Error: '+error.message,'error');return;}toast(_editQIdx===null?'Question added!':'Question updated!','success');closeModal('modal-question');loadQManager();}
-async function confirmDeleteQ(qIdx){const exams=await getExams();const q=exams.find(e=>e.id===_currentExamId).questions_data[qIdx];document.getElementById('confirm-title').textContent='Delete Question';document.getElementById('confirm-msg').textContent=`Delete Q${qIdx+1}?`;document.getElementById('confirm-ok-btn').onclick=async()=>{const exams2=await getExams();const ex=exams2.find(e=>e.id===_currentExamId);ex.questions_data.splice(qIdx,1);ex.questions=ex.questions_data.length;await db.from('exams').update({questions_data:ex.questions_data,questions:ex.questions}).eq('id',_currentExamId);toast('Question deleted');closeModal('modal-confirm');loadQManager();};openModal('modal-confirm');}
+async function saveQuestion(){const text=document.getElementById('q-f-text').value.trim();const opts=[0,1,2,3].map(i=>document.getElementById('q-f-opt'+i).value.trim());const ansEl=document.querySelector('input[name="ans"]:checked');const exp=document.getElementById('q-f-exp').value.trim();if(!text){toast('Enter question text','error');return;}if(opts.some(o=>!o)){toast('Fill all 4 options','error');return;}if(!ansEl){toast('Select correct answer','error');return;}const qObj={q:text,opts,ans:parseInt(ansEl.value),exp};const exams=await getExams();const ex=exams.find(e=>e.id===_currentExamId);if(!ex.questions_data)ex.questions_data=[];if(_editQIdx===null)ex.questions_data.push(qObj);else ex.questions_data[_editQIdx]=qObj;ex.questions=ex.questions_data.length;const{error}=await db.from('exams').update({questions_data:ex.questions_data,questions:ex.questions}).eq('id',_currentExamId);if(error){toast('Error: '+error.message,'error');return;}addLog(_editQIdx===null?`Added question to: "${ex.name}"`:`Edited question in: "${ex.name}"`, 'blue');toast(_editQIdx===null?'Question added!':'Question updated!','success');closeModal('modal-question');loadQManager();}
+async function confirmDeleteQ(qIdx){const exams=await getExams();const q=exams.find(e=>e.id===_currentExamId).questions_data[qIdx];document.getElementById('confirm-title').textContent='Delete Question';document.getElementById('confirm-msg').textContent=`Delete Q${qIdx+1}?`;document.getElementById('confirm-ok-btn').onclick=async()=>{const exams2=await getExams();const ex=exams2.find(e=>e.id===_currentExamId);ex.questions_data.splice(qIdx,1);ex.questions=ex.questions_data.length;await db.from('exams').update({questions_data:ex.questions_data,questions:ex.questions}).eq('id',_currentExamId);addLog(`Deleted a question from exam`, 'red');toast('Question deleted');closeModal('modal-confirm');loadQManager();};openModal('modal-confirm');}
 
 
 
@@ -1104,25 +1167,67 @@ function showAdminTab(tab) {
 }
 
 // ============================
-// WHATSAPP NUMBER CONFIG
+// ACTIVITY LOG
 // ============================
-const WA_KEY = 'bbc_admin_wa';
-function loadWaNumber() {
-  const n = localStorage.getItem(WA_KEY) || '';
-  document.getElementById('wa-number').value = n;
+const LOG_KEY = 'bbc_admin_log';
+function getLogs() { return JSON.parse(localStorage.getItem(LOG_KEY) || '[]'); }
+function saveLogs(logs) { localStorage.setItem(LOG_KEY, JSON.stringify(logs)); }
+
+function addLog(text, type = 'blue') {
+  const logs = getLogs();
+  logs.unshift({ text, type, time: new Date().toISOString() });
+  if (logs.length > 100) logs.pop(); // keep max 100
+  saveLogs(logs);
+  renderLog();
 }
-function saveWhatsApp() {
-  const n = document.getElementById('wa-number').value.trim().replace(/\D/g,'');
-  if (!n) { toast('Enter a valid number', 'error'); return; }
-  localStorage.setItem(WA_KEY, n);
-  // Also update the CBT's config by storing in a shared key
-  localStorage.setItem('bbc_admin_wa_pub', n);
-  toast('✅ WhatsApp number saved!', 'success');
+
+function renderLog() {
+  const logs = getLogs();
+  const el = document.getElementById('activity-log');
+  if (!el) return;
+  if (!logs.length) {
+    el.innerHTML = '<div style="text-align:center;padding:20px;color:var(--muted);font-size:0.84rem;">No activity yet.</div>';
+    return;
+  }
+  el.innerHTML = logs.map(l => {
+    const d = new Date(l.time);
+    const timeStr = d.toLocaleDateString('en-GB',{day:'numeric',month:'short'}) + ' ' + d.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+    return `<div class="log-entry">
+      <div class="log-dot ${l.type}"></div>
+      <div class="log-text">${escHtml(l.text)}</div>
+      <div class="log-time">${timeStr}</div>
+    </div>`;
+  }).join('');
+}
+
+function clearLog() {
+  if (!confirm('Clear all activity logs?')) return;
+  saveLogs([]);
+  renderLog();
+  toast('Log cleared');
 }
 
 // ============================
-// STUDENT APPROVALS — Supabase
+// BULK APPROVE ALL PENDING
 // ============================
+async function approveAllPending() {
+  const students = await getStudents();
+  const pending = students.filter(s => s.status === 'pending');
+  if (!pending.length) { toast('No pending students to approve', ''); return; }
+  if (!confirm(`Approve all ${pending.length} pending student(s) at once?`)) return;
+
+  const now = new Date().toISOString();
+  const ids = pending.map(s => s.id);
+  const { error } = await db.from('profiles')
+    .update({ status: 'approved', approved_at: now })
+    .in('id', ids);
+
+  if (error) { toast('❌ Error: ' + error.message, 'error'); return; }
+  addLog(`Bulk approved ${pending.length} pending student(s)`, 'green');
+  toast(`✅ ${pending.length} students approved!`, 'success');
+  loadApprovals();
+  loadDashboard();
+}
 async function getStudents() {
   const { data } = await db.from('profiles').select('*').order('registered_at', { ascending: false });
   return data || [];
@@ -1183,7 +1288,7 @@ async function setStudentStatus(studentId, status) {
   if (status === 'approved') update.approved_at = new Date().toISOString();
   const { error } = await db.from('profiles').update(update).eq('id', studentId);
   if (error) { toast('❌ ' + error.message, 'error'); return; }
-  toast(status==='approved'?'✅ Student approved!':status==='rejected'?'⛔ Student rejected':'↩ Reset to pending', status==='approved'?'success':'');
+  const sData=(await getStudents()).find(s=>s.id===studentId);addLog(status==='approved'?`Approved student: "${sData?.name||studentId}"`:status==='rejected'?`Rejected student: "${sData?.name||studentId}"`:`Reset student to pending: "${sData?.name||studentId}"`, status==='approved'?'green':status==='rejected'?'red':'muted');toast(status==='approved'?'✅ Student approved!':status==='rejected'?'⛔ Student rejected':'↩ Reset to pending', status==='approved'?'success':'');
   loadApprovals();
 }
 
