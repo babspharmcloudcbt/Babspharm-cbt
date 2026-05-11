@@ -7,23 +7,23 @@
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #fffdf0;
-    --surface: #fff9e0;
+    --bg: #f0eeff;
+    --surface: #e4dfff;
     --card: #ffffff;
-    --border: #e8d88a;
-    --accent: #c89b00;
-    --accent2: #a07800;
-    --gold: #c89b00;
+    --border: #c4b8f5;
+    --accent: #6c2bd9;
+    --accent2: #5b21b6;
+    --gold: #f59e0b;
     --success: #16a34a;
     --danger: #ef4444;
     --warn: #d97706;
-    --text: #1a1200;
-    --muted: #8a7030;
+    --text: #160a2e;
+    --muted: #6b5a8a;
     --font-head: 'Syne', sans-serif;
     --font-body: 'DM Sans', sans-serif;
     --font-mono: 'DM Mono', monospace;
     --radius: 12px;
-    --glow: 0 0 30px rgba(200,155,0,0.18);
+    --glow: 0 0 30px rgba(108,43,217,0.2);
   }
 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -57,7 +57,7 @@
     justify-content: space-between;
     padding: 16px 24px;
     border-bottom: 1px solid var(--border);
-    background: rgba(255,253,240,0.95);
+    background: rgba(240,238,255,0.95);
     backdrop-filter: blur(12px);
     position: sticky;
     top: 0;
@@ -66,9 +66,9 @@
   .logo { font-family: var(--font-head); font-weight: 800; font-size: 1.1rem; letter-spacing: 0.05em; color: var(--accent); }
   .logo span { color: var(--text); }
   .admin-badge {
-    background: rgba(200,155,0,0.1);
+    background: rgba(108,43,217,0.1);
     border: 1px solid rgba(124,58,237,0.3);
-    color: #7a5c00;
+    color: #3b0764;
     font-size: 0.72rem;
     font-family: var(--font-mono);
     padding: 3px 10px;
@@ -89,10 +89,10 @@
     transition: all 0.2s;
     letter-spacing: 0.03em;
   }
-  .btn-primary { background: var(--accent); color: #000; box-shadow: 0 0 20px rgba(200,155,0,0.3); }
+  .btn-primary { background: var(--accent); color: #000; box-shadow: 0 0 20px rgba(108,43,217,0.3); }
   .btn-primary:hover { background: #00b8e0; transform: translateY(-1px); }
   .btn-ghost { background: transparent; color: var(--accent); border: 1px solid var(--accent); }
-  .btn-ghost:hover { background: rgba(200,155,0,0.08); }
+  .btn-ghost:hover { background: rgba(108,43,217,0.08); }
   .btn-danger { background: var(--danger); color: #fff; }
   .btn-danger:hover { background: #dc2626; }
   .btn-success { background: var(--success); color: #fff; }
@@ -121,7 +121,7 @@
   }
   .field input:focus, .field select:focus, .field textarea:focus {
     border-color: var(--accent);
-    box-shadow: 0 0 0 3px rgba(200,155,0,0.1);
+    box-shadow: 0 0 0 3px rgba(108,43,217,0.1);
   }
   .field input::placeholder, .field textarea::placeholder { color: var(--muted); }
   .field select option { background: var(--card); }
@@ -149,31 +149,66 @@
   .page-header p { color: var(--muted); font-size: 0.88rem; margin-top: 5px; }
 
   .stats-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; margin-bottom: 32px; }
-  .stat-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; display: flex; align-items: center; gap: 14px; }
-  .stat-icon { width: 44px; height: 44px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; flex-shrink: 0; }
-  .stat-icon.blue { background: rgba(200,155,0,0.12); }
-  .stat-icon.purple { background: rgba(200,155,0,0.1); }
-  .stat-icon.gold { background: rgba(245,158,11,0.12); }
-  .stat-label { font-size: 0.75rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.07em; font-weight: 600; }
-  .stat-val { font-family: var(--font-head); font-size: 1.5rem; font-weight: 800; margin-top: 2px; }
+  .stat-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    box-shadow: 0 2px 12px rgba(108,43,217,0.08);
+    transition: transform 0.2s, box-shadow 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+  .stat-card::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #6c2bd9, #14b8a6);
+    border-radius: var(--radius) var(--radius) 0 0;
+  }
+  .stat-card:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(108,43,217,0.14); }
+  .stat-card.green-card::after { background: linear-gradient(90deg, #16a34a, #14b8a6); }
+  .stat-card.red-card::after   { background: linear-gradient(90deg, #dc2626, #f97316); }
+
+  .stat-icon { width: 46px; height: 46px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; flex-shrink: 0; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+  .stat-icon.blue   { background: linear-gradient(135deg,#ede9fe,#ddd6fe); }
+  .stat-icon.purple { background: linear-gradient(135deg,#f3e8ff,#e9d5ff); }
+  .stat-icon.gold   { background: linear-gradient(135deg,#fef9c3,#fde68a); }
+  .stat-label { font-size: 0.72rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; font-weight: 700; }
+  .stat-val { font-family: var(--font-head); font-size: 1.6rem; font-weight: 800; margin-top: 3px; color: var(--text); }
 
   .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
-  .section-title { font-family: var(--font-head); font-weight: 700; font-size: 0.9rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; }
+  .section-title { font-family: var(--font-head); font-weight: 800; font-size: 0.78rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.12em; }
 
   .exam-list { display: flex; flex-direction: column; gap: 12px; }
   .exam-card {
     background: var(--card);
     border: 1px solid var(--border);
     border-radius: var(--radius);
-    padding: 18px 20px;
+    padding: 18px 20px 18px 24px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 14px;
-    transition: border-color 0.2s;
+    transition: all 0.2s;
     flex-wrap: wrap;
+    box-shadow: 0 2px 10px rgba(108,43,217,0.06);
+    position: relative;
+    overflow: hidden;
   }
-  .exam-card:hover { border-color: rgba(200,155,0,0.25); }
+  .exam-card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 4px;
+    background: linear-gradient(180deg, #6c2bd9, #14b8a6);
+    border-radius: var(--radius) 0 0 var(--radius);
+  }
+  .exam-card:hover { border-color: rgba(108,43,217,0.35); box-shadow: 0 6px 20px rgba(108,43,217,0.12); transform: translateX(2px); }
   .exam-info h3 { font-family: var(--font-head); font-weight: 700; font-size: 0.95rem; }
   .exam-info p { color: var(--muted); font-size: 0.8rem; margin-top: 4px; }
   .exam-actions { display: flex; gap: 8px; flex-shrink: 0; }
@@ -181,20 +216,20 @@
   .badge {
     font-size: 0.72rem;
     font-family: var(--font-mono);
-    padding: 2px 9px;
+    padding: 3px 10px;
     border-radius: 20px;
-    background: rgba(200,155,0,0.1);
+    background: rgba(108,43,217,0.1);
     color: var(--accent);
-    border: 1px solid rgba(200,155,0,0.2);
-    font-weight: 500;
+    border: 1px solid rgba(108,43,217,0.2);
+    font-weight: 600;
     display: inline-block;
     margin-top: 5px;
     margin-right: 4px;
   }
-  .badge.gold { background: rgba(245,158,11,0.1); color: var(--gold); border-color: rgba(245,158,11,0.2); }
-  .badge.purple { background: rgba(200,155,0,0.08); color: #7a5c00; border-color: rgba(124,58,237,0.2); }
+  .badge.gold   { background: rgba(245,158,11,0.12); color: #d97706; border-color: rgba(245,158,11,0.25); }
+  .badge.purple { background: rgba(108,43,217,0.1);  color: var(--accent); border-color: rgba(108,43,217,0.2); }
 
-  .empty-state { text-align: center; padding: 52px 20px; color: var(--muted); border: 1px dashed var(--border); border-radius: var(--radius); }
+  .empty-state { text-align: center; padding: 52px 20px; color: var(--muted); border: 2px dashed var(--border); border-radius: var(--radius); background: rgba(108,43,217,0.02); }
   .empty-state .icon { font-size: 2.5rem; margin-bottom: 14px; }
   .empty-state h3 { font-family: var(--font-head); font-weight: 700; margin-bottom: 6px; color: var(--text); }
   .empty-state p { font-size: 0.86rem; }
@@ -216,7 +251,7 @@
     overflow: hidden;
     transition: border-color 0.2s;
   }
-  .q-item:hover { border-color: rgba(200,155,0,0.2); }
+  .q-item:hover { border-color: rgba(108,43,217,0.2); }
   .q-item-head { padding: 14px 18px; display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; cursor: pointer; }
   .q-item-num { font-family: var(--font-mono); font-size: 0.72rem; color: var(--accent); font-weight: 500; flex-shrink: 0; margin-top: 2px; }
   .q-item-text { font-size: 0.9rem; line-height: 1.5; flex: 1; }
@@ -234,7 +269,7 @@
   }
   .q-opt-preview.correct { border-color: var(--success); background: rgba(16,185,129,0.08); color: var(--success); }
   .q-opt-preview .ol { font-family: var(--font-head); font-weight: 700; font-size: 0.72rem; flex-shrink: 0; }
-  .q-exp-preview { margin-top: 10px; padding: 10px 13px; background: rgba(124,58,237,0.08); border: 1px solid rgba(124,58,237,0.2); border-radius: 7px; font-size: 0.8rem; color: #7a5c00; line-height: 1.6; }
+  .q-exp-preview { margin-top: 10px; padding: 10px 13px; background: rgba(124,58,237,0.08); border: 1px solid rgba(124,58,237,0.2); border-radius: 7px; font-size: 0.8rem; color: #3b0764; line-height: 1.6; }
   .q-exp-preview strong { color: #c4b5fd; }
 
   /* === MODALS === */
@@ -295,7 +330,7 @@
 
   .template-hint {
     background: rgba(0,212,255,0.06);
-    border: 1px solid rgba(200,155,0,0.15);
+    border: 1px solid rgba(108,43,217,0.15);
     border-radius: 8px;
     padding: 12px 14px;
     font-size: 0.82rem;
@@ -316,6 +351,29 @@
   .import-status { display: flex; align-items: center; gap: 10px; padding: 11px 14px; border-radius: 8px; font-size: 0.85rem; margin-bottom: 14px; }
   .import-status.ok  { background: rgba(16,185,129,0.1); border: 1px solid rgba(16,185,129,0.25); color: var(--success); }
   .import-status.err { background: rgba(239,68,68,0.1);  border: 1px solid rgba(239,68,68,0.25);  color: #fca5a5; }
+
+  /* === REPORTS === */
+  .rpt-stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:20px;}
+  .rpt-stat{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px;text-align:center;}
+  .rpt-stat .val{font-family:var(--font-head);font-size:1.6rem;font-weight:800;display:block;margin-bottom:4px;}
+  .rpt-stat .lbl{font-size:0.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.07em;}
+  .rpt-section{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:18px 20px;margin-bottom:14px;}
+  .rpt-section h3{font-family:var(--font-head);font-size:0.85rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:14px;}
+  .dist-row{display:flex;align-items:center;gap:10px;margin-bottom:8px;font-size:0.78rem;}
+  .dist-label{width:70px;color:var(--muted);flex-shrink:0;}
+  .dist-bar-wrap{flex:1;background:rgba(0,0,0,.06);border-radius:20px;height:8px;}
+  .dist-bar{height:100%;border-radius:20px;transition:width .5s;}
+  .dist-count{width:40px;text-align:right;color:var(--muted);flex-shrink:0;}
+  .top-student{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border);}
+  .top-student:last-child{border-bottom:none;}
+  .ts-rank{font-family:var(--font-head);font-weight:800;font-size:1rem;width:30px;flex-shrink:0;}
+  .ts-info{flex:1;}.ts-info h4{font-size:0.85rem;font-weight:700;}.ts-info p{font-size:0.72rem;color:var(--muted);}
+  .ts-score{font-family:var(--font-head);font-weight:800;font-size:1rem;}
+  .hard-q{padding:10px 0;border-bottom:1px solid var(--border);font-size:0.82rem;}
+  .hard-q:last-child{border-bottom:none;}
+  .hard-q-text{margin-bottom:4px;line-height:1.5;}
+  .hard-q-stat{font-size:0.72rem;color:var(--muted);}
+  .flag{display:inline-block;background:rgba(220,38,38,.1);color:#ef4444;border:1px solid rgba(220,38,38,.2);border-radius:20px;font-size:0.68rem;padding:1px 7px;margin-left:5px;font-family:var(--font-mono);}
 
   /* === ACTIVITY LOG === */
   .log-entry {
@@ -389,8 +447,9 @@
       <span class="admin-badge">ADMIN</span>
     </div>
     <div style="display:flex;align-items:center;gap:10px;">
-      <button class="btn btn-sm btn-ghost" onclick="showAdminTab('approvals')" id="approvals-tab-btn">👥 Student Approvals <span id="pending-badge" style="display:none;background:#ef4444;color:#fff;font-size:.65rem;padding:1px 6px;border-radius:10px;margin-left:4px;"></span></button>
-      <button class="btn btn-sm btn-ghost" onclick="changePassword()">🔑 Change Password</button>
+      <button class="btn btn-sm btn-ghost" onclick="showAdminTab('reports')" id="reports-tab-btn">📊 Reports</button>
+      <button class="btn btn-sm btn-ghost" onclick="showAdminTab('approvals')" id="approvals-tab-btn">👥 Students <span id="pending-badge" style="display:none;background:#ef4444;color:#fff;font-size:.65rem;padding:1px 6px;border-radius:10px;margin-left:4px;"></span></button>
+      <button class="btn btn-sm btn-ghost" onclick="changePassword()">🔑 Password</button>
       <button class="btn btn-sm btn-outline" onclick="doLogout()">Logout</button>
     </div>
   </div>
@@ -483,7 +542,7 @@
 
     <!-- Filter tabs -->
     <div style="display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap;align-items:center;">
-      <button class="btn btn-sm" id="af-all" onclick="filterApprovals('all')" style="background:rgba(200,155,0,.12);border:1px solid rgba(200,155,0,.25);color:var(--accent);">All</button>
+      <button class="btn btn-sm" id="af-all" onclick="filterApprovals('all')" style="background:rgba(108,43,217,.12);border:1px solid rgba(108,43,217,.25);color:var(--accent);">All</button>
       <button class="btn btn-sm btn-outline" id="af-pending" onclick="filterApprovals('pending')">⏳ Pending</button>
       <button class="btn btn-sm btn-outline" id="af-approved" onclick="filterApprovals('approved')">✅ Approved</button>
       <button class="btn btn-sm btn-outline" id="af-rejected" onclick="filterApprovals('rejected')">⛔ Rejected</button>
@@ -491,6 +550,26 @@
     </div>
 
     <div id="approvals-list"></div>
+  </div>
+
+  <!-- REPORTS PANEL -->
+  <div class="dash-content" id="reports-panel" style="display:none;">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:22px;">
+      <button class="back-btn" onclick="showAdminTab('dashboard')" style="margin-bottom:0;">← Back to Dashboard</button>
+    </div>
+    <div class="page-header">
+      <h2>📊 Class Performance Report</h2>
+      <p>Detailed analytics for each exam — scores, pass rates, hardest questions and top students.</p>
+    </div>
+
+    <div class="field" style="margin-bottom:20px;">
+      <label>Select Exam to Analyse</label>
+      <select id="rpt-exam-select" onchange="loadReport()" style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:11px 14px;color:var(--text);font-family:var(--font-body);font-size:0.9rem;width:100%;outline:none;">
+        <option value="">Choose an exam...</option>
+      </select>
+    </div>
+
+    <div id="report-content"></div>
   </div>
 </div>
 
@@ -553,6 +632,11 @@
     <div class="field">
       <label>Access Code (optional — leave blank for open access)</label>
       <input type="text" id="exam-f-code" placeholder="e.g. PCY2024 (students must enter this to start)" style="font-family:var(--font-mono);letter-spacing:0.1em;"/>
+    </div>
+    <div class="field">
+      <label>Questions Per Attempt (Question Pool)</label>
+      <input type="number" id="exam-f-pool" placeholder="e.g. 40 — leave blank to use all questions" min="1"/>
+      <p style="font-size:0.75rem;color:var(--muted);margin-top:4px;">If you add 100 questions but set this to 40, each student gets 40 random questions from the pool.</p>
     </div>
     <div class="modal-actions">
       <button class="btn btn-outline" onclick="closeModal('modal-exam')">Cancel</button>
@@ -824,9 +908,9 @@ async function loadDashboard() {
 }
 
 let _editExamId=null;
-function openAddExamModal(){_editExamId=null;document.getElementById('modal-exam-title').textContent='Add New Course';document.getElementById('exam-save-btn').textContent='Save Course';['exam-f-name','exam-f-subject','exam-f-duration','exam-f-code'].forEach(id=>document.getElementById(id).value='');openModal('modal-exam');}
-async function openEditExamModal(examId){_editExamId=examId;const exams=await getExams();const ex=exams.find(e=>e.id===examId);document.getElementById('modal-exam-title').textContent='Edit Course';document.getElementById('exam-save-btn').textContent='Update Course';document.getElementById('exam-f-name').value=ex.name;document.getElementById('exam-f-subject').value=ex.subject;document.getElementById('exam-f-duration').value=ex.duration;document.getElementById('exam-f-code').value=ex.access_code||'';openModal('modal-exam');}
-async function saveExam(){const name=document.getElementById('exam-f-name').value.trim(),subject=document.getElementById('exam-f-subject').value.trim(),duration=parseInt(document.getElementById('exam-f-duration').value),access_code=document.getElementById('exam-f-code').value.trim();if(!name||!subject||!duration){toast('Fill all fields','error');return;}if(_editExamId===null){const{error}=await db.from('exams').insert({id:genId(),name,subject,duration,questions:0,questions_data:[],access_code});if(error){toast('Error: '+error.message,'error');return;}addLog(`Created course: "${name}"`, 'green');toast('Course added!','success');}else{const{error}=await db.from('exams').update({name,subject,duration,access_code}).eq('id',_editExamId);if(error){toast('Error: '+error.message,'error');return;}addLog(`Updated course: "${name}"`, 'blue');toast('Course updated!','success');}closeModal('modal-exam');loadDashboard();}
+function openAddExamModal(){_editExamId=null;document.getElementById('modal-exam-title').textContent='Add New Course';document.getElementById('exam-save-btn').textContent='Save Course';['exam-f-name','exam-f-subject','exam-f-duration','exam-f-code','exam-f-pool'].forEach(id=>document.getElementById(id).value='');openModal('modal-exam');}
+async function openEditExamModal(examId){_editExamId=examId;const exams=await getExams();const ex=exams.find(e=>e.id===examId);document.getElementById('modal-exam-title').textContent='Edit Course';document.getElementById('exam-save-btn').textContent='Update Course';document.getElementById('exam-f-name').value=ex.name;document.getElementById('exam-f-subject').value=ex.subject;document.getElementById('exam-f-duration').value=ex.duration;document.getElementById('exam-f-code').value=ex.access_code||'';document.getElementById('exam-f-pool').value=ex.pool_size||'';openModal('modal-exam');}
+async function saveExam(){const name=document.getElementById('exam-f-name').value.trim(),subject=document.getElementById('exam-f-subject').value.trim(),duration=parseInt(document.getElementById('exam-f-duration').value),access_code=document.getElementById('exam-f-code').value.trim(),pool_size=parseInt(document.getElementById('exam-f-pool').value)||null;if(!name||!subject||!duration){toast('Fill all fields','error');return;}if(_editExamId===null){const{error}=await db.from('exams').insert({id:genId(),name,subject,duration,questions:0,questions_data:[],access_code,pool_size});if(error){toast('Error: '+error.message,'error');return;}addLog(`Created course: "${name}"`, 'green');toast('Course added!','success');}else{const{error}=await db.from('exams').update({name,subject,duration,access_code,pool_size}).eq('id',_editExamId);if(error){toast('Error: '+error.message,'error');return;}addLog(`Updated course: "${name}"`, 'blue');toast('Course updated!','success');}closeModal('modal-exam');loadDashboard();}
 async function confirmDeleteExam(examId){const exams=await getExams();const ex=exams.find(e=>e.id===examId);document.getElementById('confirm-title').textContent='Delete Course';document.getElementById('confirm-msg').textContent=`Delete "${ex.name}"?`;document.getElementById('confirm-ok-btn').onclick=async()=>{await db.from('exams').delete().eq('id',examId);addLog(`Deleted course: "${ex.name}"`, 'red');toast('Course deleted');closeModal('modal-confirm');loadDashboard();};openModal('modal-confirm');}
 
 let _currentExamId=null;
@@ -1152,18 +1236,176 @@ function escHtml(str) {
 // ADMIN TAB SWITCHER
 // ============================
 function showAdminTab(tab) {
-  const dashEl = document.querySelector('.dash-content:not(#approvals-panel)');
-  const appEl  = document.getElementById('approvals-panel');
-  if (tab === 'approvals') {
-    dashEl.style.display = 'none';
-    appEl.style.display  = '';
-    loadApprovals();
-    loadWaNumber();
-  } else {
-    dashEl.style.display = '';
-    appEl.style.display  = 'none';
-    loadDashboard();
+  const dashEl    = document.querySelector('.dash-content:not(#approvals-panel):not(#reports-panel)');
+  const appEl     = document.getElementById('approvals-panel');
+  const rptEl     = document.getElementById('reports-panel');
+  dashEl.style.display  = tab === 'dashboard' ? '' : 'none';
+  appEl.style.display   = tab === 'approvals' ? '' : 'none';
+  rptEl.style.display   = tab === 'reports'   ? '' : 'none';
+  if (tab === 'approvals') { loadApprovals(); loadWaNumber(); }
+  if (tab === 'reports')   { initReportExamSelect(); }
+  if (tab === 'dashboard') loadDashboard();
+}
+
+// ============================
+// CLASS PERFORMANCE REPORT
+// ============================
+async function initReportExamSelect() {
+  const exams = await getExams();
+  const sel   = document.getElementById('rpt-exam-select');
+  sel.innerHTML = '<option value="">Choose an exam...</option>';
+  exams.forEach(ex => {
+    sel.innerHTML += `<option value="${ex.id}">${escHtml(ex.name)} (${(ex.questions_data||[]).length} Qs)</option>`;
+  });
+  document.getElementById('report-content').innerHTML = '';
+}
+
+async function loadReport() {
+  const examId = document.getElementById('rpt-exam-select').value;
+  const el     = document.getElementById('report-content');
+  if (!examId) { el.innerHTML = ''; return; }
+
+  el.innerHTML = `<div style="text-align:center;padding:40px;color:var(--muted);">Loading report...</div>`;
+
+  const exams = await getExams();
+  const ex    = exams.find(e => e.id === examId);
+
+  const { data: results } = await db.from('results')
+    .select('*').eq('exam_id', examId).order('date', { ascending: false });
+
+  if (!results || !results.length) {
+    el.innerHTML = `<div class="empty-state"><div class="icon">📭</div><h3>No Results Yet</h3><p>No students have taken this exam yet.</p></div>`;
+    return;
   }
+
+  const scores    = results.map(r => r.pct);
+  const avg       = Math.round(scores.reduce((a,b)=>a+b,0) / scores.length);
+  const passRate  = Math.round(scores.filter(s=>s>=50).length / scores.length * 100);
+  const highest   = Math.max(...scores);
+  const lowest    = Math.min(...scores);
+  const totalAttempts = results.length;
+  const uniqueStudents = new Set(results.map(r=>r.student_email)).size;
+
+  // Score distribution
+  const ranges = [
+    { label:'90–100%', min:90, max:100, color:'#16a34a' },
+    { label:'70–89%',  min:70, max:89,  color:'#65a30d' },
+    { label:'50–69%',  min:50, max:69,  color:'#6c2bd9' },
+    { label:'30–49%',  min:30, max:49,  color:'#f97316' },
+    { label:'0–29%',   min:0,  max:29,  color:'#dc2626' },
+  ];
+
+  const distHtml = ranges.map(r => {
+    const cnt = scores.filter(s => s >= r.min && s <= r.max).length;
+    const pct = scores.length ? Math.round(cnt/scores.length*100) : 0;
+    return `<div class="dist-row">
+      <div class="dist-label">${r.label}</div>
+      <div class="dist-bar-wrap"><div class="dist-bar" style="width:${pct}%;background:${r.color};"></div></div>
+      <div class="dist-count">${cnt}</div>
+    </div>`;
+  }).join('');
+
+  // Top performers (best per student)
+  const bestMap = {};
+  results.forEach(r => {
+    if (!bestMap[r.student_email] || r.pct > bestMap[r.student_email].pct) bestMap[r.student_email] = r;
+  });
+  const topStudents = Object.values(bestMap).sort((a,b) => b.pct-a.pct || a.time_used-b.time_used).slice(0,5);
+  const medals = ['🥇','🥈','🥉','4️⃣','5️⃣'];
+  const topHtml = topStudents.map((r,i) => {
+    const mins = r.time_used ? Math.round(r.time_used/60)+' min' : '—';
+    const vFlag = r.violations > 0 ? `<span class="flag">⚠️ ${r.violations} violation${r.violations>1?'s':''}</span>` : '';
+    return `<div class="top-student">
+      <div class="ts-rank">${medals[i]}</div>
+      <div class="ts-info">
+        <h4>${escHtml(r.student_name||'Unknown')}${vFlag}</h4>
+        <p>${r.score}/${r.total} correct · ${mins}</p>
+      </div>
+      <div class="ts-score" style="color:${r.pct>=70?'#16a34a':r.pct>=50?'var(--accent)':'#ef4444'};">${r.pct}%</div>
+    </div>`;
+  }).join('');
+
+  // All students table
+  const allRows = [...Object.values(bestMap)].sort((a,b)=>b.pct-a.pct).map((r,i) => {
+    const mins = r.time_used ? Math.round(r.time_used/60)+' min' : '—';
+    const date = r.date ? new Date(r.date).toLocaleDateString('en-GB',{day:'numeric',month:'short'}) : '—';
+    const vFlag = r.violations > 0 ? `<span class="flag">⚠️${r.violations}</span>` : '';
+    return `<tr>
+      <td style="font-family:var(--font-mono);color:var(--muted);font-size:.7rem;">${i+1}</td>
+      <td style="font-size:.78rem;">${escHtml(r.student_name||'—')}${vFlag}</td>
+      <td style="font-size:.76rem;color:var(--muted);">${escHtml(r.student_email||'')}</td>
+      <td style="font-weight:700;color:${r.pct>=50?'#16a34a':'#ef4444'};">${r.pct}%</td>
+      <td style="font-size:.72rem;color:var(--muted);">${r.score}/${r.total}</td>
+      <td style="font-size:.72rem;color:var(--muted);">${mins}</td>
+      <td style="font-size:.72rem;color:var(--muted);">${date}</td>
+    </tr>`;
+  }).join('');
+
+  // Violations flagged
+  const flagged = results.filter(r => r.violations > 0);
+
+  el.innerHTML = `
+    <!-- SUMMARY STATS -->
+    <div class="rpt-stat-grid">
+      <div class="rpt-stat"><span class="val" style="color:var(--accent);">${totalAttempts}</span><span class="lbl">Total Attempts</span></div>
+      <div class="rpt-stat"><span class="val" style="color:#3b0764;">${uniqueStudents}</span><span class="lbl">Students</span></div>
+      <div class="rpt-stat"><span class="val" style="color:var(--accent);">${avg}%</span><span class="lbl">Class Average</span></div>
+      <div class="rpt-stat"><span class="val" style="color:#16a34a;">${passRate}%</span><span class="lbl">Pass Rate</span></div>
+      <div class="rpt-stat"><span class="val" style="color:#16a34a;">${highest}%</span><span class="lbl">Highest Score</span></div>
+      <div class="rpt-stat"><span class="val" style="color:#ef4444;">${lowest}%</span><span class="lbl">Lowest Score</span></div>
+    </div>
+
+    <!-- DISTRIBUTION -->
+    <div class="rpt-section">
+      <h3>📊 Score Distribution</h3>
+      ${distHtml}
+    </div>
+
+    <!-- TOP PERFORMERS -->
+    <div class="rpt-section">
+      <h3>🏆 Top Performers</h3>
+      ${topHtml || '<p style="color:var(--muted);font-size:.84rem;">No data yet.</p>'}
+    </div>
+
+    <!-- VIOLATIONS -->
+    ${flagged.length ? `<div class="rpt-section" style="border-color:rgba(220,38,38,.25);">
+      <h3 style="color:#ef4444;">🚨 Suspicious Attempts (${flagged.length})</h3>
+      ${flagged.map(r=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border);font-size:.82rem;">
+        <div><strong>${escHtml(r.student_name||'Unknown')}</strong> <span class="flag">⚠️ ${r.violations} violation${r.violations>1?'s':''}</span></div>
+        <div style="color:var(--accent);font-weight:700;">${r.pct}%</div>
+      </div>`).join('')}
+    </div>` : ''}
+
+    <!-- ALL STUDENTS TABLE -->
+    <div class="rpt-section">
+      <h3>📋 All Students</h3>
+      <div style="overflow-x:auto;">
+        <table style="width:100%;border-collapse:collapse;font-size:.78rem;">
+          <thead><tr style="background:var(--surface);">
+            <th style="padding:8px;text-align:left;color:var(--muted);font-size:.68rem;">#</th>
+            <th style="padding:8px;text-align:left;color:var(--muted);font-size:.68rem;">Name</th>
+            <th style="padding:8px;text-align:left;color:var(--muted);font-size:.68rem;">Email</th>
+            <th style="padding:8px;text-align:left;color:var(--muted);font-size:.68rem;">Score</th>
+            <th style="padding:8px;text-align:left;color:var(--muted);font-size:.68rem;">Correct</th>
+            <th style="padding:8px;text-align:left;color:var(--muted);font-size:.68rem;">Time</th>
+            <th style="padding:8px;text-align:left;color:var(--muted);font-size:.68rem;">Date</th>
+          </tr></thead>
+          <tbody>${allRows}</tbody>
+        </table>
+      </div>
+      <button class="btn btn-outline btn-sm" onclick="exportReportCSV('${examId}')" style="margin-top:12px;">📥 Export CSV</button>
+    </div>`;
+}
+
+async function exportReportCSV(examId) {
+  const { data: results } = await db.from('results').select('*').eq('exam_id', examId).order('pct',{ascending:false});
+  if (!results?.length) { toast('No data to export',''); return; }
+  const rows = ['Rank,Name,Email,Score(%),Correct,Total,Time(min),Violations,Date',
+    ...results.map((r,i) => `${i+1},"${r.student_name||''}","${r.student_email||''}",${r.pct}%,${r.score},${r.total},${r.time_used?Math.round(r.time_used/60):'—'},${r.violations||0},${r.date?new Date(r.date).toLocaleDateString():'-'}`)];
+  const blob = new Blob([rows.join('\n')],{type:'text/csv'});
+  const a = document.createElement('a'); a.href=URL.createObjectURL(blob);
+  a.download = 'report_'+examId+'.csv'; a.click();
+  toast('📥 CSV exported!','success');
 }
 
 // ============================
@@ -1247,7 +1489,7 @@ function filterApprovals(f) {
   ['all','pending','approved','rejected'].forEach(x => {
     const btn = document.getElementById('af-'+x);
     btn.className = x===f ? 'btn btn-sm' : 'btn btn-sm btn-outline';
-    if (x===f){btn.style.background='rgba(200,155,0,.12)';btn.style.borderColor='rgba(200,155,0,.25)';btn.style.color='var(--accent)';}
+    if (x===f){btn.style.background='rgba(108,43,217,.12)';btn.style.borderColor='rgba(108,43,217,.25)';btn.style.color='var(--accent)';}
     else{btn.style.background='';btn.style.borderColor='';btn.style.color='';}
   });
   getStudents().then(s => renderApprovals(s));
@@ -1266,7 +1508,7 @@ function renderApprovals(students) {
     const date=s.registered_at?new Date(s.registered_at).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}):'—';
     return `<div style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px 20px;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;">
       <div style="display:flex;align-items:center;gap:14px;min-width:0;">
-        <div style="width:38px;height:38px;border-radius:50%;background:rgba(200,155,0,.1);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--accent);flex-shrink:0;">${s.name.charAt(0).toUpperCase()}</div>
+        <div style="width:38px;height:38px;border-radius:50%;background:rgba(108,43,217,.1);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--accent);flex-shrink:0;">${s.name.charAt(0).toUpperCase()}</div>
         <div style="min-width:0;">
           <div style="font-family:var(--font-head);font-weight:700;font-size:0.9rem;">${escHtml(s.name)}</div>
           <div style="font-size:0.76rem;color:var(--muted);">${escHtml(s.email)}</div>

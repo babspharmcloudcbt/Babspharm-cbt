@@ -7,27 +7,216 @@
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #fffdf0;
-    --surface: #fff9e0;
+    --bg: #f0eeff;
+    --surface: #e4dfff;
     --card: #ffffff;
-    --border: #e8d88a;
-    --accent: #c89b00;
-    --accent2: #a07800;
-    --gold: #c89b00;
+    --border: #c4b8f5;
+    --accent: #6c2bd9;
+    --accent2: #5b21b6;
+    --gold: #f59e0b;
     --success: #16a34a;
     --danger: #dc2626;
     --warn: #d97706;
-    --text: #1a1200;
-    --muted: #8a7030;
+    --text: #160a2e;
+    --muted: #6b5a8a;
     --answered: #16a34a;
-    --unanswered: #e8d88a;
-    --review: #d97706;
+    --unanswered: #c4b8f5;
+    --review: #f59e0b;
     --font-head: 'Syne', sans-serif;
     --font-body: 'DM Sans', sans-serif;
     --font-mono: 'DM Mono', monospace;
     --radius: 12px;
-    --glow: 0 0 30px rgba(200,155,0,0.18);
+    --glow: 0 0 30px rgba(108,43,217,0.2);
   }
+
+  /* === CARD GRID DASHBOARD === */
+  .welcome-banner {
+    padding: 20px 18px 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  .welcome-text h2 {
+    font-family: var(--font-head);
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: var(--text);
+  }
+  .welcome-text p { font-size: 0.82rem; color: var(--muted); margin-top: 3px; }
+  .welcome-avatar {
+    width: 52px; height: 52px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, rgba(108,43,217,.2), rgba(20,184,166,.15));
+    border: 2px solid var(--accent);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: var(--accent);
+    font-family: var(--font-head);
+    flex-shrink: 0;
+    cursor: pointer;
+  }
+
+  .mini-stats {
+    display: flex;
+    gap: 8px;
+    padding: 14px 18px 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .mini-stats::-webkit-scrollbar { display: none; }
+  .mini-stat {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 10px 16px;
+    text-align: center;
+    flex-shrink: 0;
+    min-width: 76px;
+    box-shadow: 0 2px 8px rgba(108,43,217,0.07);
+    transition: transform 0.2s;
+  }
+  .mini-stat:hover { transform: translateY(-2px); }
+  .mini-stat .ms-val { font-family: var(--font-head); font-size: 1.15rem; font-weight: 800; color: var(--accent); display: block; }
+  .mini-stat .ms-lbl { font-size: 0.6rem; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; margin-top: 2px; display: block; }
+
+  .section-label {
+    font-family: var(--font-head);
+    font-size: 0.72rem;
+    font-weight: 800;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: .12em;
+    padding: 18px 18px 10px;
+  }
+
+  .feature-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    padding: 0 18px;
+  }
+
+  .feature-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 18px 14px 16px;
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(.175,.885,.32,1.275);
+    position: relative;
+    overflow: hidden;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-height: 120px;
+    box-shadow: 0 2px 12px rgba(108,43,217,0.07);
+  }
+  /* Subtle top accent line per card */
+  .feature-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    border-radius: 18px 18px 0 0;
+    background: var(--card-accent, var(--accent));
+  }
+  .feature-card:hover {
+    border-color: var(--card-accent, var(--accent));
+    transform: translateY(-3px) scale(1.01);
+    box-shadow: 0 8px 28px rgba(108,43,217,0.16);
+  }
+  .feature-card:active { transform: scale(0.97); }
+
+  .fc-icon {
+    width: 46px; height: 46px;
+    border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.45rem;
+    flex-shrink: 0;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  }
+  .fc-title { font-family: var(--font-head); font-weight: 700; font-size: 0.88rem; color: var(--text); line-height: 1.3; }
+  .fc-desc  { font-size: 0.72rem; color: var(--muted); line-height: 1.4; }
+
+  .fc-badge {
+    position: absolute;
+    top: 12px; right: 10px;
+    font-size: 0.62rem;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 20px;
+    font-family: var(--font-mono);
+  }
+  .fc-badge.live    { background: rgba(22,163,74,.15);  color: #16a34a; border: 1px solid rgba(22,163,74,.25); }
+  .fc-badge.soon    { background: rgba(108,43,217,.12); color: #7c3aed; border: 1px solid rgba(108,43,217,.2); }
+  .fc-badge.new     { background: rgba(239,68,68,.12);  color: #ef4444; border: 1px solid rgba(239,68,68,.2); }
+  .fc-badge.streak  { background: rgba(245,158,11,.12); color: #d97706; border: 1px solid rgba(245,158,11,.2); }
+
+  /* Card icon background colors */
+  .fc-blue   { background: linear-gradient(135deg,#ede9fe,#ddd6fe); --card-accent: #6c2bd9; }
+  .fc-gold   { background: linear-gradient(135deg,#fef9c3,#fde68a); --card-accent: #d97706; }
+  .fc-green  { background: linear-gradient(135deg,#dcfce7,#bbf7d0); --card-accent: #16a34a; }
+  .fc-red    { background: linear-gradient(135deg,#fee2e2,#fecaca); --card-accent: #ef4444; }
+  .fc-purple { background: linear-gradient(135deg,#f3e8ff,#e9d5ff); --card-accent: #9333ea; }
+  .fc-orange { background: linear-gradient(135deg,#ffedd5,#fed7aa); --card-accent: #ea580c; }
+  .fc-teal   { background: linear-gradient(135deg,#ccfbf1,#99f6e4); --card-accent: #0d9488; }
+  .fc-pink   { background: linear-gradient(135deg,#fce7f3,#fbcfe8); --card-accent: #db2777; }
+
+  .feature-card.coming-soon { opacity: 0.72; }
+  .feature-card.coming-soon:hover { transform: none; box-shadow: 0 2px 12px rgba(108,43,217,0.07); border-color: var(--border); cursor: default; }
+
+  /* Exams list inside panel */
+  .exams-panel { padding: 0 18px; }
+
+  /* === DARK MODE === */
+  body.dark {
+    --bg: #0d0818;
+    --surface: #160d2a;
+    --card: #1e1036;
+    --border: #2e1a52;
+    --accent: #a78bfa;
+    --accent2: #7c3aed;
+    --gold: #f59e0b;
+    --success: #22c55e;
+    --danger: #ef4444;
+    --warn: #f59e0b;
+    --text: #e8f0fe;
+    --muted: #6b8ab0;
+    --answered: #22c55e;
+    --unanswered: #2e1a52;
+    --review: #f59e0b;
+    --glow: 0 0 30px rgba(167,139,250,0.2);
+  }
+  body.dark::before {
+    background:
+      radial-gradient(ellipse 80% 50% at 20% 0%, rgba(240,192,64,0.05) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 40% at 80% 100%, rgba(200,155,0,0.04) 0%, transparent 60%);
+  }
+  body.dark .bottom-nav { background: rgba(13,8,24,0.97); }
+  body.dark .topbar { background: rgba(13,8,24,0.97); }
+  body.dark .exam-topbar { background: rgba(13,8,24,0.97); }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  /* Dark mode toggle button */
+  .dark-toggle {
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 5px 12px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    color: var(--muted);
+    font-family: var(--font-body);
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .dark-toggle:hover { border-color: var(--accent); color: var(--accent); }
 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -37,6 +226,7 @@
     font-family: var(--font-body);
     min-height: 100vh;
     overflow-x: hidden;
+    transition: background-color 0.25s ease, color 0.15s ease;
   }
 
   /* === BACKGROUND MESH === */
@@ -45,8 +235,8 @@
     position: fixed;
     inset: 0;
     background:
-      radial-gradient(ellipse 80% 50% at 20% 0%, rgba(200,155,0,0.08) 0%, transparent 60%),
-      radial-gradient(ellipse 60% 40% at 80% 100%, rgba(255,220,0,0.06) 0%, transparent 60%);
+      radial-gradient(ellipse 80% 50% at 20% 0%, rgba(108,43,217,0.1) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 40% at 80% 100%, rgba(20,184,166,0.08) 0%, transparent 60%);
     pointer-events: none;
     z-index: 0;
   }
@@ -61,7 +251,7 @@
     justify-content: space-between;
     padding: 16px 24px;
     border-bottom: 1px solid var(--border);
-    background: rgba(255,253,240,0.95);
+    background: rgba(240,238,255,0.95);
     backdrop-filter: blur(12px);
     position: sticky;
     top: 0;
@@ -91,19 +281,19 @@
   .btn-primary {
     background: var(--accent);
     color: #fff;
-    box-shadow: 0 0 20px rgba(200,155,0,0.3);
+    box-shadow: 0 0 20px rgba(108,43,217,0.3);
   }
-  .btn-primary:hover { background: #a07800; box-shadow: 0 0 30px rgba(200,155,0,0.5); transform: translateY(-1px); }
+  .btn-primary:hover { background: #5b21b6; box-shadow: 0 0 30px rgba(108,43,217,0.4); transform: translateY(-1px); }
   .btn-ghost {
     background: transparent;
     color: var(--accent);
     border: 1px solid var(--accent);
   }
-  .btn-ghost:hover { background: rgba(200,155,0,0.08); }
+  .btn-ghost:hover { background: rgba(108,43,217,0.08); }
   .btn-danger { background: var(--danger); color: #fff; }
   .btn-danger:hover { background: #dc2626; }
   .btn-outline { background: transparent; color: var(--text); border: 1px solid var(--border); }
-  .btn-outline:hover { border-color: var(--accent); color: var(--accent); background: rgba(200,155,0,0.06); }
+  .btn-outline:hover { border-color: var(--accent); color: var(--accent); background: rgba(108,43,217,0.06); }
   .btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none !important; }
 
   /* ===========================
@@ -136,7 +326,7 @@
     border: 1px solid var(--border);
     border-radius: 16px;
     padding: 36px;
-    box-shadow: var(--glow), 0 20px 60px rgba(200,155,0,0.1);
+    box-shadow: var(--glow), 0 20px 60px rgba(108,43,217,0.12);
   }
   .login-card h2 {
     font-family: var(--font-head);
@@ -161,7 +351,7 @@
   }
   .field input:focus, .field select:focus {
     border-color: var(--accent);
-    box-shadow: 0 0 0 3px rgba(200,155,0,0.15);
+    box-shadow: 0 0 0 3px rgba(108,43,217,0.15);
   }
   .field input::placeholder { color: var(--muted); }
   .field select option { background: var(--card); }
@@ -172,7 +362,7 @@
   =========================== */
   #screen-dashboard { padding: 0; }
   .dash-hero {
-    background: linear-gradient(135deg, #fff8d0 0%, #fffde8 100%);
+    background: linear-gradient(135deg, #ede9ff 0%, #f5f3ff 100%);
     border-bottom: 1px solid var(--border);
     padding: 36px 28px;
   }
@@ -197,9 +387,9 @@
     font-size: 1.4rem;
     flex-shrink: 0;
   }
-  .stat-icon.blue { background: rgba(200,155,0,0.12); }
-  .stat-icon.purple { background: rgba(160,120,0,0.12); }
-  .stat-icon.gold { background: rgba(200,155,0,0.15); }
+  .stat-icon.blue { background: rgba(108,43,217,0.12); }
+  .stat-icon.purple { background: rgba(124,58,237,0.12); }
+  .stat-icon.gold { background: rgba(245,158,11,0.12); }
   .stat-label { font-size: 0.78rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.07em; font-weight: 600; }
   .stat-val { font-family: var(--font-head); font-size: 1.5rem; font-weight: 800; margin-top: 2px; }
 
@@ -216,7 +406,7 @@
     transition: border-color 0.2s, box-shadow 0.2s;
     flex-wrap: wrap;
   }
-  .exam-card:hover { border-color: rgba(200,155,0,0.5); box-shadow: var(--glow); }
+  .exam-card:hover { border-color: rgba(108,43,217,0.4); box-shadow: var(--glow); }
   .exam-info h3 { font-family: var(--font-head); font-weight: 700; font-size: 1rem; }
   .exam-info p { font-size: 0.82rem; color: var(--muted); margin-top: 4px; }
   .exam-meta { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 8px; }
@@ -225,12 +415,12 @@
     font-family: var(--font-mono);
     padding: 3px 10px;
     border-radius: 20px;
-    background: rgba(200,155,0,0.12);
+    background: rgba(108,43,217,0.1);
     color: var(--accent);
-    border: 1px solid rgba(200,155,0,0.3);
+    border: 1px solid rgba(108,43,217,0.25);
     font-weight: 500;
   }
-  .badge.gold { background: rgba(200,155,0,0.12); color: var(--gold); border-color: rgba(200,155,0,0.3); }
+  .badge.gold { background: rgba(245,158,11,0.12); color: var(--gold); border-color: rgba(245,158,11,0.3); }
   .badge.green { background: rgba(22,163,74,0.1); color: var(--success); border-color: rgba(22,163,74,0.25); }
   .section-title {
     font-family: var(--font-head);
@@ -257,10 +447,10 @@
     border: 1px solid var(--border);
     border-radius: 16px;
     overflow: hidden;
-    box-shadow: var(--glow), 0 20px 60px rgba(200,155,0,0.1);
+    box-shadow: var(--glow), 0 20px 60px rgba(108,43,217,0.12);
   }
   .instr-head {
-    background: linear-gradient(135deg, rgba(200,155,0,0.12), rgba(255,220,0,0.08));
+    background: linear-gradient(135deg, rgba(108,43,217,0.12), rgba(20,184,166,0.08));
     border-bottom: 1px solid var(--border);
     padding: 28px;
     text-align: center;
@@ -311,7 +501,7 @@
     grid-template-columns: 1fr auto 1fr;
     align-items: center;
     padding: 12px 20px;
-    background: rgba(255,253,240,0.97);
+    background: rgba(240,238,255,0.97);
     backdrop-filter: blur(12px);
     border-bottom: 1px solid var(--border);
     position: sticky;
@@ -327,8 +517,8 @@
     font-size: 1.5rem;
     font-weight: 500;
     color: var(--accent);
-    background: rgba(200,155,0,0.1);
-    border: 1px solid rgba(200,155,0,0.3);
+    background: rgba(108,43,217,0.1);
+    border: 1px solid rgba(108,43,217,0.3);
     border-radius: 8px;
     padding: 6px 18px;
     transition: color 0.3s, background 0.3s, border-color 0.3s;
@@ -398,8 +588,8 @@
     transition: all 0.2s;
     font-size: 0.95rem;
   }
-  .option:hover { border-color: rgba(200,155,0,0.4); background: rgba(200,155,0,0.06); }
-  .option.selected { border-color: var(--accent); background: rgba(200,155,0,0.1); color: var(--accent); }
+  .option:hover { border-color: rgba(108,43,217,0.4); background: rgba(108,43,217,0.06); }
+  .option.selected { border-color: var(--accent); background: rgba(108,43,217,0.08); color: var(--accent); }
   .option-label {
     width: 30px; height: 30px;
     border-radius: 50%;
@@ -443,7 +633,7 @@
   .palette-btn:hover { border-color: var(--accent); color: var(--accent); }
   .palette-btn.answered { background: rgba(22,163,74,0.15); border-color: var(--answered); color: var(--answered); }
   .palette-btn.review { background: rgba(217,119,6,0.12); border-color: var(--review); color: var(--review); }
-  .palette-btn.current { border-color: var(--accent); color: var(--accent); box-shadow: 0 0 0 2px rgba(200,155,0,0.3); }
+  .palette-btn.current { border-color: var(--accent); color: var(--accent); box-shadow: 0 0 0 2px rgba(108,43,217,0.3); }
   .legend { display: flex; flex-direction: column; gap: 7px; }
   .legend-item { display: flex; align-items: center; gap: 8px; font-size: 0.75rem; color: var(--muted); }
   .legend-dot { width: 10px; height: 10px; border-radius: 3px; flex-shrink: 0; }
@@ -471,7 +661,7 @@
     padding: 36px;
     text-align: center;
     margin-bottom: 20px;
-    box-shadow: var(--glow), 0 8px 30px rgba(200,155,0,0.08);
+    box-shadow: var(--glow), 0 8px 30px rgba(108,43,217,0.1);
     position: relative;
     overflow: hidden;
   }
@@ -597,7 +787,7 @@
     border-radius: 30px;
     font-size: 0.88rem;
     font-family: var(--font-body);
-    box-shadow: 0 6px 20px rgba(200,155,0,0.1);
+    box-shadow: 0 6px 20px rgba(108,43,217,0.1);
     opacity: 0;
     transition: all 0.3s;
     z-index: 2000;
@@ -617,7 +807,7 @@
   .auth-logo h1 { font-family: var(--font-head); font-size: 1.9rem; font-weight: 800; color: var(--accent); letter-spacing: 0.05em; }
   .auth-logo h1 span { color: var(--text); }
   .auth-logo p { color: var(--muted); font-size: 0.88rem; margin-top: 6px; }
-  .auth-card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 32px; box-shadow: var(--glow), 0 8px 30px rgba(200,155,0,0.08); }
+  .auth-card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 32px; box-shadow: var(--glow), 0 8px 30px rgba(108,43,217,0.1); }
   .auth-card h2 { font-family: var(--font-head); font-size: 1.2rem; font-weight: 700; margin-bottom: 6px; }
   .auth-card > p { color: var(--muted); font-size: 0.86rem; margin-bottom: 24px; line-height: 1.6; }
   .auth-err { display: none; background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.3); color: #fca5a5; border-radius: 8px; padding: 10px 14px; font-size: 0.84rem; margin-bottom: 14px; line-height: 1.5; }
@@ -629,20 +819,20 @@
   .pw-toggle { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; color: var(--muted); cursor: pointer; font-size: 1rem; padding: 4px; }
 
   /* Pending screen */
-  .pending-card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 36px 28px; text-align: center; box-shadow: var(--glow), 0 8px 30px rgba(200,155,0,0.08); }
+  .pending-card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 36px 28px; text-align: center; box-shadow: var(--glow), 0 8px 30px rgba(108,43,217,0.1); }
   .pending-icon { font-size: 3rem; margin-bottom: 16px; }
   .pending-card h2 { font-family: var(--font-head); font-size: 1.3rem; font-weight: 800; margin-bottom: 10px; }
   .pending-card p { color: var(--muted); font-size: 0.88rem; line-height: 1.7; margin-bottom: 0; }
   .whatsapp-btn { display: inline-flex; align-items: center; gap: 10px; background: #25D366; color: #fff; font-family: var(--font-head); font-weight: 700; font-size: 0.95rem; padding: 13px 24px; border-radius: 10px; text-decoration: none; margin: 20px 0 14px; transition: background 0.2s; }
   .whatsapp-btn:hover { background: #1ebe5a; }
-  .pending-note { background: rgba(200,155,0,0.07); border: 1px solid rgba(200,155,0,0.15); border-radius: 10px; padding: 14px; font-size: 0.82rem; color: var(--muted); line-height: 1.6; }
+  .pending-note { background: rgba(108,43,217,0.07); border: 1px solid rgba(108,43,217,0.15); border-radius: 10px; padding: 14px; font-size: 0.82rem; color: var(--muted); line-height: 1.6; }
   .pending-note strong { color: var(--accent); }
 
   /* === BOTTOM NAV === */
   .bottom-nav {
     position: fixed;
     bottom: 0; left: 0; right: 0;
-    background: rgba(255,253,240,0.97);
+    background: rgba(240,238,255,0.97);
     backdrop-filter: blur(16px);
     border-top: 1px solid var(--border);
     display: flex;
@@ -674,7 +864,7 @@
 
   /* === LOADING SKELETONS === */
   .skeleton {
-    background: linear-gradient(90deg, #f0e8c0 25%, #fff8d0 50%, #f0e8c0 75%);
+    background: linear-gradient(90deg, #ddd6ff 25%, #ede9ff 50%, #ddd6ff 75%);
     background-size: 200% 100%;
     animation: shimmer 1.4s infinite;
     border-radius: 8px;
@@ -704,7 +894,7 @@
     width: 100%;
     max-width: 380px;
     text-align: center;
-    box-shadow: var(--glow), 0 20px 50px rgba(0,0,0,0.15);
+    box-shadow: var(--glow), 0 20px 50px rgba(108,43,217,0.12);
   }
   .access-card h3 { font-family: var(--font-head); font-size: 1.1rem; font-weight: 800; margin-bottom: 6px; }
   .access-card p  { color: var(--muted); font-size: 0.85rem; margin-bottom: 20px; }
@@ -746,7 +936,7 @@
 
   /* === PUSH NOTIFICATION BANNER === */
   .notif-banner {
-    background: linear-gradient(135deg, rgba(200,155,0,0.12), rgba(255,220,0,0.08));
+    background: linear-gradient(135deg, rgba(108,43,217,0.12), rgba(20,184,166,0.08));
     border: 1px solid rgba(200,155,0,0.3);
     border-radius: 10px;
     padding: 12px 16px;
@@ -769,6 +959,65 @@
   pointer-events: none;
   z-index: 9999;
 }
+
+
+  /* === LEADERBOARD === */
+  .lb-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 16px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    margin-bottom: 8px;
+    transition: border-color 0.2s;
+  }
+  .lb-item.me { border-color: var(--accent); background: rgba(200,155,0,.05); }
+  .lb-item.top1 { border-color: #FFD700; background: rgba(255,215,0,.06); }
+  .lb-item.top2 { border-color: #C0C0C0; background: rgba(192,192,192,.05); }
+  .lb-item.top3 { border-color: #CD7F32; background: rgba(205,127,50,.05); }
+  .lb-rank {
+    font-family: var(--font-head);
+    font-weight: 800;
+    font-size: 1.1rem;
+    width: 36px;
+    text-align: center;
+    flex-shrink: 0;
+  }
+  .lb-avatar {
+    width: 38px; height: 38px;
+    border-radius: 50%;
+    background: rgba(108,43,217,.12);
+    border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 1rem;
+    color: var(--accent);
+    flex-shrink: 0;
+  }
+  .lb-info { flex: 1; min-width: 0; }
+  .lb-info h4 { font-family: var(--font-head); font-weight: 700; font-size: 0.88rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .lb-info p  { font-size: 0.72rem; color: var(--muted); margin-top: 2px; }
+  .lb-score { font-family: var(--font-head); font-weight: 800; font-size: 1.1rem; flex-shrink: 0; }
+  .lb-empty { text-align: center; padding: 40px 20px; color: var(--muted); }
+  .lb-empty .ei { font-size: 2.5rem; margin-bottom: 10px; }
+
+  /* === ANTI-CHEAT === */
+  .violation-banner {
+    display:none;
+    background:linear-gradient(135deg,#dc2626,#b91c1c);
+    color:#fff;
+    padding:10px 20px;
+    font-size:0.85rem;
+    font-weight:600;
+    text-align:center;
+    animation:shake 0.4s ease;
+    letter-spacing:0.02em;
+  }
+  @keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-8px)}40%{transform:translateX(8px)}60%{transform:translateX(-6px)}80%{transform:translateX(6px)}}
+  .violation-dots { display:inline-flex; gap:4px; margin-left:8px; vertical-align:middle; }
+  .v-dot { width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,.4); }
+  .v-dot.filled { background:#fff; }
 
   /* === RESPONSIVE === */
   @media (max-width: 700px) {
@@ -794,6 +1043,11 @@
      SCREEN 1: LOGIN
 =========================== -->
 <div id="screen-login" class="screen active">
+  <div style="position:absolute;top:16px;right:16px;">
+    <button class="dark-toggle" onclick="toggleDarkMode()">
+      <span id="dark-toggle-icon-login">🌙</span> Dark
+    </button>
+  </div>
   <div class="auth-wrap">
     <div class="auth-logo">
       <h1>BABSPHARM<span> CLOUD</span></h1>
@@ -912,11 +1166,14 @@
      BOTTOM NAVIGATION
 =========================== -->
 <div class="bottom-nav hidden" id="bottom-nav">
-  <button class="nav-btn active" id="nav-exams" onclick="switchDashTab('exams',this)">
-    <span class="nav-icon">📋</span>Exams
+  <button class="nav-btn active" id="nav-home" onclick="switchDashTab('home',this)">
+    <span class="nav-icon">🏠</span>Home
+  </button>
+  <button class="nav-btn" id="nav-exams" onclick="switchDashTab('exams',this)">
+    <span class="nav-icon">📝</span>Exams
   </button>
   <button class="nav-btn" id="nav-history" onclick="switchDashTab('history',this)">
-    <span class="nav-icon">📊</span>History
+    <span class="nav-icon">📊</span>Results
   </button>
   <button class="nav-btn" id="nav-profile" onclick="switchDashTab('profile',this)">
     <span class="nav-icon">👤</span>Profile
@@ -929,14 +1186,14 @@
 <div id="screen-dashboard" class="screen">
   <div class="topbar">
     <div class="logo">BABSPHARM<span> CLOUD</span></div>
-    <div style="display:flex;align-items:center;gap:10px;">
-      <span id="dash-user-name" style="font-size:0.82rem;color:var(--muted);max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"></span>
+    <div style="display:flex;align-items:center;gap:8px;">
+      <button class="dark-toggle" onclick="toggleDarkMode()">
+        <span id="dark-toggle-icon">🌙</span>
+        <span id="dark-toggle-label">Dark</span>
+      </button>
     </div>
   </div>
-  <div class="dash-hero">
-    <h2>Welcome, <span id="dash-greeting">Student</span>! 👋</h2>
-    <p>Your CBT portal — take exams, track your progress.</p>
-  </div>
+
   <div class="dash-body has-bottom-nav">
 
     <!-- NOTIFICATION PROMPT -->
@@ -946,39 +1203,230 @@
       <button class="btn btn-primary" style="padding:6px 12px;font-size:0.75rem;" onclick="requestNotifPermission()">Enable</button>
     </div>
 
-    <!-- TAB: EXAMS -->
-    <div class="dash-tab-panel active" id="tab-exams">
-      <div class="dash-grid" id="stat-grid">
-        <div class="stat-card"><div class="stat-icon blue">📋</div><div><div class="stat-label">Exams Taken</div><div class="stat-val" id="stat-taken">—</div></div></div>
-        <div class="stat-card"><div class="stat-icon gold">🏆</div><div><div class="stat-label">Best Score</div><div class="stat-val" id="stat-best">—</div></div></div>
-        <div class="stat-card"><div class="stat-icon purple">⏱</div><div><div class="stat-label">Avg. Time</div><div class="stat-val" id="stat-time">—</div></div></div>
+    <!-- ══ TAB: HOME (CARD GRID) ══ -->
+    <div class="dash-tab-panel active" id="tab-home">
+
+      <!-- Welcome Banner -->
+      <div class="welcome-banner">
+        <div class="welcome-text">
+          <h2>Welcome 👋 <span id="dash-greeting">Student</span></h2>
+          <p id="dash-subtext">Now you can have all As</p>
+        </div>
+        <div class="welcome-avatar" id="dash-avatar" onclick="switchDashTab('profile', document.getElementById('nav-profile'))">?</div>
       </div>
-      <div class="section-title">Available Exams</div>
-      <div class="exam-list" id="exam-list"></div>
+
+      <!-- Mini Stats -->
+      <div class="mini-stats">
+        <div class="mini-stat">
+          <span class="ms-val" id="stat-taken">0</span>
+          <span class="ms-lbl">Exams</span>
+        </div>
+        <div class="mini-stat">
+          <span class="ms-val" id="stat-best">—</span>
+          <span class="ms-lbl">Best</span>
+        </div>
+        <div class="mini-stat">
+          <span class="ms-val" id="stat-time">—</span>
+          <span class="ms-lbl">Avg Time</span>
+        </div>
+        <div class="mini-stat">
+          <span class="ms-val" id="stat-streak">0🔥</span>
+          <span class="ms-lbl">Streak</span>
+        </div>
+      </div>
+
+      <div class="section-label">Your Tools</div>
+
+      <!-- Feature Cards Grid -->
+      <div class="feature-grid">
+
+        <!-- CBT Exams -->
+        <div class="feature-card" onclick="switchDashTab('exams', document.getElementById('nav-exams'))">
+          <span class="fc-badge live">LIVE</span>
+          <div class="fc-icon fc-blue">📝</div>
+          <div class="fc-title">CBT Exams</div>
+          <div class="fc-desc">Take practice & real exams</div>
+        </div>
+
+        <!-- My Results -->
+        <div class="feature-card" onclick="switchDashTab('history', document.getElementById('nav-history'))">
+          <span class="fc-badge live">LIVE</span>
+          <div class="fc-icon fc-gold">📊</div>
+          <div class="fc-title">My Results</div>
+          <div class="fc-desc">Scores, charts & history</div>
+        </div>
+
+        <!-- Leaderboard -->
+        <div class="feature-card" onclick="switchDashTab('leaderboard', document.getElementById('nav-leaderboard'))">
+          <span class="fc-badge streak" id="streak-badge">0🔥 Streak</span>
+          <div class="fc-icon fc-purple">🏆</div>
+          <div class="fc-title">Leaderboard & Streaks</div>
+          <div class="fc-desc">Rankings & daily streaks</div>
+        </div>
+
+        <!-- Pomodoro -->
+        <div class="feature-card" onclick="switchDashTab('pomodoro', null)">
+          <span class="fc-badge live">LIVE</span>
+          <div class="fc-icon fc-red">⏱</div>
+          <div class="fc-title">Pomodoro Timer</div>
+          <div class="fc-desc" id="pomo-preview">25:00 / 5:00</div>
+        </div>
+
+        <!-- Deadline Tracker -->
+        <div class="feature-card" onclick="switchDashTab('deadlines', null)">
+          <span class="fc-badge live">LIVE</span>
+          <div class="fc-icon fc-orange">📅</div>
+          <div class="fc-title">Deadline Tracker</div>
+          <div class="fc-desc" id="deadline-preview">Track assignments</div>
+        </div>
+
+        <!-- Resource Library -->
+        <div class="feature-card coming-soon">
+          <span class="fc-badge soon">PDF</span>
+          <div class="fc-icon fc-teal">📚</div>
+          <div class="fc-title">Resource Library</div>
+          <div class="fc-desc">LaTeX & PDF materials</div>
+        </div>
+
+        <!-- Hint System -->
+        <div class="feature-card coming-soon">
+          <span class="fc-badge new">A+ hint</span>
+          <div class="fc-icon fc-green">💡</div>
+          <div class="fc-title">Hints & Explanations</div>
+          <div class="fc-desc">Step by step guidance</div>
+        </div>
+
+        <!-- Topic Breakdown -->
+        <div class="feature-card coming-soon">
+          <span class="fc-badge soon">SOON</span>
+          <div class="fc-icon fc-pink">📈</div>
+          <div class="fc-title">Topic Breakdown</div>
+          <div class="fc-desc">Weak vs strong topics</div>
+        </div>
+
+      </div>
+      <div style="height:16px;"></div>
     </div>
 
-    <!-- TAB: HISTORY & STATS -->
+    <!-- ══ TAB: EXAMS ══ -->
+    <div class="dash-tab-panel" id="tab-exams">
+      <div class="exams-panel">
+        <div class="section-label" style="padding-left:0;">Available Exams</div>
+        <div class="exam-list" id="exam-list"></div>
+      </div>
+    </div>
+
+    <!-- ══ TAB: HISTORY ══ -->
     <div class="dash-tab-panel" id="tab-history">
-      <div class="chart-wrap" id="score-chart-wrap" style="display:none;">
-        <div class="chart-title">📈 Your Score History</div>
-        <div class="bar-chart" id="score-chart"></div>
-      </div>
-      <div class="history-section">
-        <div class="history-title">Past Results</div>
-        <div id="history-list"></div>
+      <div style="padding:0 18px;">
+        <div class="chart-wrap" id="score-chart-wrap" style="display:none;">
+          <div class="chart-title">📈 Your Score History</div>
+          <div class="bar-chart" id="score-chart"></div>
+        </div>
+        <div class="history-section">
+          <div class="history-title">Past Results</div>
+          <div id="history-list"></div>
+        </div>
       </div>
     </div>
 
-    <!-- TAB: PROFILE -->
-    <div class="dash-tab-panel" id="tab-profile">
-      <div class="auth-card" style="margin-bottom:16px;">
-        <h2 style="font-size:1rem;margin-bottom:14px;">👤 My Profile</h2>
-        <div class="field"><label>Full Name</label><input type="text" id="prof-name" placeholder="Your full name"/></div>
-        <div class="field"><label>Gmail</label><input type="email" id="prof-email" readonly style="opacity:0.6;cursor:not-allowed;"/></div>
-        <div class="field"><label>New Password (leave blank to keep current)</label><input type="password" id="prof-pw" placeholder="Enter new password"/></div>
-        <button class="btn btn-primary" style="width:100%;" onclick="saveProfile()">💾 Save Changes</button>
+    <!-- ══ TAB: LEADERBOARD ══ -->
+    <div class="dash-tab-panel" id="tab-leaderboard">
+      <div style="padding:0 18px;">
+        <div class="field" style="margin-bottom:14px;">
+          <label>Select Exam</label>
+          <select id="lb-exam-select" onchange="loadLeaderboard()" style="background:var(--card);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-family:var(--font-body);font-size:0.88rem;width:100%;outline:none;">
+            <option value="">Choose an exam to see rankings...</option>
+          </select>
+        </div>
+        <div id="leaderboard-list"></div>
       </div>
-      <button class="btn btn-outline" style="width:100%;" onclick="doLogout()">🚪 Logout</button>
+    </div>
+
+    <!-- ══ TAB: POMODORO ══ -->
+    <div class="dash-tab-panel" id="tab-pomodoro">
+      <div style="padding:0 18px;">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:16px;margin-top:4px;">
+          <button class="btn btn-ghost btn-sm" onclick="switchDashTab('home',document.getElementById('nav-home'))">← Back</button>
+          <span style="font-family:var(--font-head);font-weight:700;font-size:1rem;">⏱ Pomodoro Timer</span>
+        </div>
+        <div style="background:var(--card);border:1px solid var(--border);border-radius:16px;padding:28px 20px;text-align:center;">
+          <div id="pomo-mode-label" style="font-size:0.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:12px;">Focus Session</div>
+          <div id="pomo-display" style="font-family:var(--font-head);font-size:4rem;font-weight:800;color:var(--accent);line-height:1;margin-bottom:8px;">25:00</div>
+          <div id="pomo-session-count" style="font-size:0.78rem;color:var(--muted);margin-bottom:24px;">Session 1 of 4</div>
+          <div style="display:flex;gap:10px;justify-content:center;margin-bottom:20px;">
+            <button class="btn btn-primary" id="pomo-start-btn" onclick="pomoToggle()" style="padding:12px 28px;font-size:1rem;">▶ Start</button>
+            <button class="btn btn-outline" onclick="pomoReset()" style="padding:12px 20px;">↺ Reset</button>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:0.8rem;">
+            <div style="background:var(--surface);border-radius:10px;padding:12px;cursor:pointer;" onclick="pomoSetMode('focus')">
+              <div style="font-weight:700;color:var(--text);">🎯 Focus</div>
+              <div style="color:var(--muted);font-size:.75rem;">25 minutes</div>
+            </div>
+            <div style="background:var(--surface);border-radius:10px;padding:12px;cursor:pointer;" onclick="pomoSetMode('break')">
+              <div style="font-weight:700;color:var(--text);">☕ Short Break</div>
+              <div style="color:var(--muted);font-size:.75rem;">5 minutes</div>
+            </div>
+          </div>
+          <div style="margin-top:12px;background:var(--surface);border-radius:10px;padding:12px;text-align:left;">
+            <div style="font-size:.75rem;font-weight:700;color:var(--muted);margin-bottom:8px;text-transform:uppercase;letter-spacing:.07em;">What to study?</div>
+            <input type="text" id="pomo-task" placeholder="e.g. PCY 201 Chapter 3..." style="background:none;border:none;outline:none;font-size:.88rem;color:var(--text);width:100%;font-family:var(--font-body);"/>
+          </div>
+          <div id="pomo-history-list" style="margin-top:14px;max-height:140px;overflow-y:auto;"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ TAB: DEADLINES ══ -->
+    <div class="dash-tab-panel" id="tab-deadlines">
+      <div style="padding:0 18px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;margin-top:4px;">
+          <div style="display:flex;align-items:center;gap:8px;">
+            <button class="btn btn-ghost btn-sm" onclick="switchDashTab('home',document.getElementById('nav-home'))">← Back</button>
+            <span style="font-family:var(--font-head);font-weight:700;font-size:1rem;">📅 Deadline Tracker</span>
+          </div>
+          <button class="btn btn-primary btn-sm" onclick="openAddDeadline()">+ Add</button>
+        </div>
+        <div id="deadline-list"></div>
+      </div>
+    </div>
+
+    <!-- ══ TAB: PROFILE ══ -->
+    <div class="dash-tab-panel" id="tab-profile">
+      <div style="padding:0 18px;">
+        <div class="auth-card" style="margin-bottom:16px;margin-top:4px;">
+          <h2 style="font-size:1rem;margin-bottom:14px;">👤 My Profile</h2>
+          <div class="field"><label>Full Name</label><input type="text" id="prof-name" placeholder="Your full name"/></div>
+          <div class="field"><label>Gmail</label><input type="email" id="prof-email" readonly style="opacity:0.6;cursor:not-allowed;"/></div>
+          <div class="field"><label>New Password (leave blank to keep current)</label><input type="password" id="prof-pw" placeholder="Enter new password"/></div>
+          <button class="btn btn-primary" style="width:100%;" onclick="saveProfile()">💾 Save Changes</button>
+        </div>
+        <button class="btn btn-outline" style="width:100%;" onclick="doLogout()">🚪 Logout</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Add Deadline Modal -->
+<div class="access-overlay" id="deadline-modal">
+  <div class="access-card" style="text-align:left;">
+    <h3 style="margin-bottom:16px;">📅 Add Deadline</h3>
+    <div class="field"><label>Title</label><input type="text" id="dl-title" placeholder="e.g. PCY 201 Assignment"/></div>
+    <div class="field"><label>Due Date</label><input type="date" id="dl-date"/></div>
+    <div class="field">
+      <label>Type</label>
+      <select id="dl-type" style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:10px;color:var(--text);font-family:var(--font-body);width:100%;outline:none;">
+        <option value="exam">📝 Exam</option>
+        <option value="assignment">📋 Assignment</option>
+        <option value="quiz">🧠 Quiz</option>
+        <option value="project">🔬 Project</option>
+        <option value="other">📌 Other</option>
+      </select>
+    </div>
+    <div class="btn-row" style="margin-top:4px;">
+      <button class="btn btn-primary" onclick="saveDeadline()">Save</button>
+      <button class="btn btn-outline" onclick="closeDeadlineModal()">Cancel</button>
     </div>
   </div>
 </div>
@@ -1014,6 +1462,7 @@
           <div class="lbl">Minutes</div>
         </div>
       </div>
+      <div id="instr-pool-notice" style="display:none;background:rgba(200,155,0,.1);border:1px solid rgba(200,155,0,.25);border-radius:10px;padding:12px 16px;font-size:0.84rem;color:var(--accent);margin-bottom:14px;line-height:1.6;"></div>
       <div class="instr-actions">
         <button class="btn btn-outline" onclick="showScreen('dashboard')">← Back</button>
         <button class="btn btn-primary" onclick="beginTest()">Begin Test →</button>
@@ -1026,9 +1475,16 @@
      SCREEN 4: EXAM
 =========================== -->
 <div id="screen-exam" class="screen">
+  <div class="violation-banner" id="violation-banner">
+    ⚠️ <span id="violation-msg">Warning: Do not leave the exam tab!</span>
+    <span class="violation-dots" id="violation-dots"></span>
+  </div>
   <div class="exam-topbar">
     <div class="exam-topbar-left">
       <strong id="exam-title-bar">Exam</strong> &nbsp;|&nbsp; <span id="exam-student-bar">Student</span>
+      <div id="autosave-indicator" style="font-size:0.68rem;color:var(--muted);margin-top:2px;display:none;">
+        <span id="autosave-text">⏳ Saving...</span>
+      </div>
     </div>
     <div class="timer-wrap">
       <div class="timer" id="timer">30:00</div>
@@ -1161,16 +1617,22 @@ const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 // STATE
 // ============================
 let state = {
-  user:          null,
-  exam:          null,
-  exams:         [],
-  history:       [],
-  answers:       [],
-  marks:         [],
-  currentQ:      0,
-  timerInterval: null,
-  secondsLeft:   0,
-  startTime:     null
+  user:              null,
+  exam:              null,
+  exams:             [],
+  history:           [],
+  answers:           [],
+  marks:             [],
+  shuffledQuestions: [],
+  currentQ:          0,
+  violations:        0,
+  timerInterval:     null,
+  autoSaveInterval:  null,
+  _saveTimeout:      null,
+  secondsLeft:       0,
+  startTime:         null,
+  autoSaveKey:       null,
+  lastSaved:         null
 };
 
 // ============================
@@ -1312,13 +1774,366 @@ function showBottomNav(show) {
 }
 
 function switchDashTab(tab, btn) {
-  ['exams','history','profile'].forEach(t => {
-    document.getElementById('tab-'+t).classList.toggle('active', t===tab);
+  const allTabs = ['home','exams','history','leaderboard','pomodoro','deadlines','profile'];
+  allTabs.forEach(t => {
+    const el = document.getElementById('tab-'+t);
+    if (el) el.classList.toggle('active', t===tab);
   });
   document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
   if (btn) btn.classList.add('active');
-  if (tab === 'history') renderHistory();
-  if (tab === 'profile') loadProfile();
+  if (tab === 'history')     renderHistory();
+  if (tab === 'leaderboard') initLeaderboard();
+  if (tab === 'profile')     loadProfile();
+  if (tab === 'deadlines')   renderDeadlines();
+  if (tab === 'pomodoro')    renderPomoHistory();
+}
+
+// ============================
+// LOAD DASHBOARD
+// ============================
+async function loadDashboard() {
+  const u = state.user;
+  const initial = u.name.charAt(0).toUpperCase();
+  document.getElementById('dash-greeting').textContent = u.name.split(' ')[0];
+  document.getElementById('dash-avatar').textContent   = initial;
+  document.getElementById('dash-subtext').textContent  = 'Now you can have all As 🎯';
+  showBottomNav(true);
+  checkNotifPermission();
+  updateStreak();
+
+  // Skeleton on exam list
+  const el = document.getElementById('exam-list');
+  el.innerHTML = `<div class="skeleton skel-card"></div><div class="skeleton skel-card"></div>`;
+
+  // Load results
+  const { data: hist } = await db.from('results')
+    .select('*').eq('student_email', u.email).order('date', { ascending: false });
+  state.history = hist || [];
+
+  document.getElementById('stat-taken').textContent = state.history.length;
+  if (state.history.length > 0) {
+    const best   = Math.max(...state.history.map(h => h.pct));
+    const avgMin = Math.round(state.history.reduce((s,h) => s+(h.time_used||0),0) / state.history.length / 60);
+    document.getElementById('stat-best').textContent = best + '%';
+    document.getElementById('stat-time').textContent = avgMin + 'm';
+  } else {
+    document.getElementById('stat-best').textContent = '—';
+    document.getElementById('stat-time').textContent = '—';
+  }
+
+  // Load exams
+  const { data: exams } = await db.from('exams').select('*').order('created_at', { ascending: false });
+  state.exams = exams || [];
+
+  el.innerHTML = '';
+  if (!state.exams.length) {
+    el.innerHTML = `<div style="text-align:center;padding:40px 20px;color:var(--muted);border:1px dashed var(--border);border-radius:var(--radius);">
+      <div style="font-size:2rem;margin-bottom:10px;">📭</div>
+      <div style="font-family:var(--font-head);font-weight:700;">No Exams Available</div>
+      <div style="font-size:0.84rem;margin-top:5px;">Admin has not published any exams yet.</div>
+    </div>`;
+    return;
+  }
+  state.exams.forEach(ex => {
+    const taken     = state.history.filter(h => h.exam_id === ex.id);
+    const lastScore = taken.length ? taken[0].pct + '%' : null;
+    const hasCode   = ex.access_code && ex.access_code.trim() !== '';
+    const poolInfo  = ex.pool_size && ex.pool_size < (ex.questions_data||[]).length;
+    el.innerHTML += `
+      <div class="exam-card">
+        <div class="exam-info">
+          <h3>${ex.name}</h3>
+          <p>${ex.questions} Questions · ${ex.duration} Minutes</p>
+          <div class="exam-meta">
+            <span class="badge">${ex.subject}</span>
+            ${lastScore ? `<span class="badge green">Last: ${lastScore}</span>` : ''}
+            <span class="badge gold">${ex.duration} mins</span>
+            ${hasCode ? `<span class="badge" style="background:rgba(220,38,38,.1);color:var(--danger);border-color:rgba(220,38,38,.2);">🔐 Code</span>` : ''}
+            ${poolInfo  ? `<span class="badge">🎲 ${ex.pool_size} from ${(ex.questions_data||[]).length}</span>` : ''}
+          </div>
+        </div>
+        <button class="btn btn-primary" style="flex-shrink:0;" onclick="openInstructions('${ex.id}')">Start →</button>
+      </div>`;
+  });
+
+  // Update deadline preview
+  updateDeadlinePreview();
+}
+
+// ============================
+// STREAKS
+// ============================
+const STREAK_KEY = 'bbc_streak';
+function updateStreak() {
+  const data = JSON.parse(localStorage.getItem(STREAK_KEY) || '{"count":0,"lastDate":""}');
+  const today = new Date().toDateString();
+  if (data.lastDate !== today) {
+    const yesterday = new Date(Date.now() - 86400000).toDateString();
+    if (data.lastDate === yesterday) {
+      data.count++;
+    } else if (data.lastDate !== today) {
+      data.count = 1;
+    }
+    data.lastDate = today;
+    localStorage.setItem(STREAK_KEY, JSON.stringify(data));
+  }
+  const s = data.count;
+  document.getElementById('stat-streak').textContent = s + '🔥';
+  const badge = document.getElementById('streak-badge');
+  if (badge) badge.textContent = s + '🔥 Streak';
+}
+
+// ============================
+// POMODORO TIMER
+// ============================
+const POMO_HISTORY_KEY = 'bbc_pomo_history';
+let pomoState = { running: false, interval: null, seconds: 25*60, mode: 'focus', sessions: 0 };
+
+function pomoToggle() {
+  if (pomoState.running) {
+    clearInterval(pomoState.interval);
+    pomoState.running = false;
+    document.getElementById('pomo-start-btn').textContent = '▶ Resume';
+  } else {
+    pomoState.running = true;
+    document.getElementById('pomo-start-btn').textContent = '⏸ Pause';
+    pomoState.interval = setInterval(() => {
+      pomoState.seconds--;
+      updatePomoDisplay();
+      if (pomoState.seconds <= 0) {
+        clearInterval(pomoState.interval);
+        pomoState.running = false;
+        pomoComplete();
+      }
+    }, 1000);
+  }
+}
+
+function pomoComplete() {
+  const task = document.getElementById('pomo-task').value.trim() || 'Study session';
+  const mode = pomoState.mode;
+  if (mode === 'focus') {
+    pomoState.sessions++;
+    // Save to history
+    const hist = JSON.parse(localStorage.getItem(POMO_HISTORY_KEY) || '[]');
+    hist.unshift({ task, date: new Date().toISOString(), mins: 25 });
+    if (hist.length > 20) hist.pop();
+    localStorage.setItem(POMO_HISTORY_KEY, JSON.stringify(hist));
+    sendNotif('✅ Pomodoro Done!', `25 min focus session complete! Time for a break.`);
+    toast('✅ Focus session complete! Take a break 🎉');
+    pomoSetMode('break');
+  } else {
+    sendNotif('☕ Break Over!', 'Time to focus again!');
+    toast('☕ Break over! Back to work.');
+    pomoSetMode('focus');
+  }
+  document.getElementById('pomo-start-btn').textContent = '▶ Start';
+  renderPomoHistory();
+}
+
+function pomoSetMode(mode) {
+  pomoState.mode    = mode;
+  pomoState.seconds = mode === 'focus' ? 25*60 : 5*60;
+  pomoState.running = false;
+  clearInterval(pomoState.interval);
+  document.getElementById('pomo-mode-label').textContent = mode === 'focus' ? 'Focus Session' : 'Short Break ☕';
+  document.getElementById('pomo-start-btn').textContent  = '▶ Start';
+  document.getElementById('pomo-session-count').textContent = `Session ${pomoState.sessions + 1} of 4`;
+  updatePomoDisplay();
+}
+
+function pomoReset() {
+  clearInterval(pomoState.interval);
+  pomoState.running = false;
+  pomoState.seconds = pomoState.mode === 'focus' ? 25*60 : 5*60;
+  document.getElementById('pomo-start-btn').textContent = '▶ Start';
+  updatePomoDisplay();
+}
+
+function updatePomoDisplay() {
+  const m = Math.floor(pomoState.seconds / 60);
+  const s = pomoState.seconds % 60;
+  const display = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+  document.getElementById('pomo-display').textContent = display;
+  // Update home card preview
+  const preview = document.getElementById('pomo-preview');
+  if (preview) preview.textContent = display + (pomoState.mode === 'focus' ? ' Focus' : ' Break');
+}
+
+function renderPomoHistory() {
+  const hist = JSON.parse(localStorage.getItem(POMO_HISTORY_KEY) || '[]');
+  const el   = document.getElementById('pomo-history-list');
+  if (!el || !hist.length) return;
+  el.innerHTML = `<div style="font-size:.7rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-bottom:6px;">Recent Sessions</div>`
+    + hist.slice(0,5).map(h => {
+      const d = new Date(h.date);
+      const time = d.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+      return `<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);font-size:.75rem;">
+        <span style="color:var(--text);">🎯 ${h.task}</span>
+        <span style="color:var(--muted);">${h.mins}m · ${time}</span>
+      </div>`;
+    }).join('');
+}
+
+// ============================
+// DEADLINE TRACKER
+// ============================
+const DEADLINE_KEY = 'bbc_deadlines';
+function getDeadlines() { return JSON.parse(localStorage.getItem(DEADLINE_KEY) || '[]'); }
+function saveDeadlines(d) { localStorage.setItem(DEADLINE_KEY, JSON.stringify(d)); }
+
+function openAddDeadline() {
+  document.getElementById('dl-title').value = '';
+  document.getElementById('dl-date').value  = '';
+  document.getElementById('dl-type').value  = 'exam';
+  document.getElementById('deadline-modal').classList.add('open');
+}
+function closeDeadlineModal() { document.getElementById('deadline-modal').classList.remove('open'); }
+
+function saveDeadline() {
+  const title = document.getElementById('dl-title').value.trim();
+  const date  = document.getElementById('dl-date').value;
+  const type  = document.getElementById('dl-type').value;
+  if (!title || !date) { toast('Fill in title and date'); return; }
+  const deadlines = getDeadlines();
+  deadlines.push({ id: Date.now(), title, date, type });
+  deadlines.sort((a,b) => new Date(a.date) - new Date(b.date));
+  saveDeadlines(deadlines);
+  closeDeadlineModal();
+  renderDeadlines();
+  updateDeadlinePreview();
+  toast('📅 Deadline added!');
+}
+
+function deleteDeadline(id) {
+  saveDeadlines(getDeadlines().filter(d => d.id !== id));
+  renderDeadlines();
+  updateDeadlinePreview();
+}
+
+function updateDeadlinePreview() {
+  const deadlines = getDeadlines();
+  const preview   = document.getElementById('deadline-preview');
+  if (!preview) return;
+  const upcoming  = deadlines.filter(d => new Date(d.date) >= new Date());
+  if (!upcoming.length) { preview.textContent = 'No upcoming deadlines'; return; }
+  const next    = upcoming[0];
+  const days    = Math.ceil((new Date(next.date) - new Date()) / 86400000);
+  preview.textContent = days === 0 ? `⚡ ${next.title} — TODAY!` : `${days} day${days>1?'s':''} left — ${next.title}`;
+}
+
+function renderDeadlines() {
+  const deadlines = getDeadlines();
+  const el = document.getElementById('deadline-list');
+  if (!el) return;
+  if (!deadlines.length) {
+    el.innerHTML = `<div style="text-align:center;padding:40px 20px;color:var(--muted);">
+      <div style="font-size:2.5rem;margin-bottom:10px;">📅</div>
+      <div style="font-weight:700;color:var(--text);">No deadlines yet</div>
+      <div style="font-size:.84rem;margin-top:5px;">Tap + Add to track your assignments and exams.</div>
+    </div>`;
+    return;
+  }
+  const typeIcons = { exam:'📝', assignment:'📋', quiz:'🧠', project:'🔬', other:'📌' };
+  el.innerHTML = deadlines.map(d => {
+    const days    = Math.ceil((new Date(d.date) - new Date()) / 86400000);
+    const overdue = days < 0;
+    const today   = days === 0;
+    const color   = overdue ? '#ef4444' : today ? '#f59e0b' : days <= 3 ? '#f59e0b' : '#16a34a';
+    const label   = overdue ? 'Overdue' : today ? 'Today!' : `${days} day${days>1?'s':''} left`;
+    return `<div style="background:var(--card);border:1px solid var(--border);border-left:3px solid ${color};border-radius:12px;padding:14px 16px;margin-bottom:10px;display:flex;align-items:center;gap:12px;">
+      <div style="font-size:1.5rem;">${typeIcons[d.type]||'📌'}</div>
+      <div style="flex:1;min-width:0;">
+        <div style="font-family:var(--font-head);font-weight:700;font-size:.9rem;">${d.title}</div>
+        <div style="font-size:.74rem;color:var(--muted);margin-top:2px;">${new Date(d.date).toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short',year:'numeric'})}</div>
+      </div>
+      <div style="text-align:right;flex-shrink:0;">
+        <div style="font-size:.75rem;font-weight:700;color:${color};">${label}</div>
+        <button onclick="deleteDeadline(${d.id})" style="background:none;border:none;color:var(--muted);font-size:.8rem;cursor:pointer;margin-top:4px;">🗑</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ============================
+// LEADERBOARD
+// ============================
+async function initLeaderboard() {
+  // Populate exam selector
+  const sel = document.getElementById('lb-exam-select');
+  sel.innerHTML = '<option value="">Choose an exam to see rankings...</option>';
+  state.exams.forEach(ex => {
+    sel.innerHTML += `<option value="${ex.id}">${ex.name}</option>`;
+  });
+  document.getElementById('leaderboard-list').innerHTML = '';
+}
+
+async function loadLeaderboard() {
+  const examId = document.getElementById('lb-exam-select').value;
+  const el     = document.getElementById('leaderboard-list');
+  if (!examId) { el.innerHTML = ''; return; }
+
+  el.innerHTML = `<div style="text-align:center;padding:30px;color:var(--muted);">Loading rankings...</div>`;
+
+  // Fetch all results for this exam
+  const { data: results, error } = await db
+    .from('results')
+    .select('student_name, student_email, pct, score, total, time_used, date')
+    .eq('exam_id', examId)
+    .order('pct', { ascending: false });
+
+  if (error || !results || !results.length) {
+    el.innerHTML = `<div class="lb-empty"><div class="ei">📭</div><div style="font-weight:700;color:var(--text);">No results yet</div><p>No one has taken this exam yet. Be the first!</p></div>`;
+    return;
+  }
+
+  // Get best score per student
+  const bestMap = {};
+  results.forEach(r => {
+    const key = r.student_email;
+    if (!bestMap[key] || r.pct > bestMap[key].pct) bestMap[key] = r;
+  });
+  const ranked = Object.values(bestMap).sort((a,b) => b.pct - a.pct || a.time_used - b.time_used);
+
+  const medals = ['🥇','🥈','🥉'];
+  const rankColors = ['#FFD700','#C0C0C0','#CD7F32'];
+  const topClasses = ['top1','top2','top3'];
+
+  el.innerHTML = ranked.slice(0, 20).map((r, i) => {
+    const isMe    = r.student_email === state.user.email;
+    const medal   = medals[i] || `#${i+1}`;
+    const color   = rankColors[i] || 'var(--muted)';
+    const topCls  = topClasses[i] || '';
+    const mins    = r.time_used ? Math.round(r.time_used/60) + ' min' : '—';
+    const initial = (r.student_name||'?').charAt(0).toUpperCase();
+
+    return `<div class="lb-item ${topCls} ${isMe ? 'me' : ''}">
+      <div class="lb-rank" style="color:${color};">${medal}</div>
+      <div class="lb-avatar" style="${i < 3 ? `border-color:${color};color:${color};` : ''}">${initial}</div>
+      <div class="lb-info">
+        <h4>${isMe ? '⭐ ' : ''}${r.student_name||'Anonymous'}${isMe ? ' (You)' : ''}</h4>
+        <p>${r.score}/${r.total} correct · ${mins}</p>
+      </div>
+      <div class="lb-score" style="color:${r.pct>=70?'#16a34a':r.pct>=50?'var(--accent)':'var(--danger)'};">${r.pct}%</div>
+    </div>`;
+  }).join('');
+
+  // Show student's own rank if not in top 20
+  const myRank = ranked.findIndex(r => r.student_email === state.user.email);
+  if (myRank >= 20) {
+    const myResult = ranked[myRank];
+    el.innerHTML += `
+      <div style="text-align:center;color:var(--muted);font-size:0.8rem;padding:8px 0;">· · ·</div>
+      <div class="lb-item me">
+        <div class="lb-rank" style="color:var(--accent);">#${myRank+1}</div>
+        <div class="lb-avatar">${state.user.name.charAt(0).toUpperCase()}</div>
+        <div class="lb-info">
+          <h4>⭐ ${state.user.name} (You)</h4>
+          <p>${myResult.score}/${myResult.total} correct</p>
+        </div>
+        <div class="lb-score" style="color:var(--accent);">${myResult.pct}%</div>
+      </div>`;
+  }
 }
 
 // ============================
@@ -1415,6 +2230,7 @@ async function loadDashboard() {
             ${lastScore ? `<span class="badge green">Last: ${lastScore}</span>` : ''}
             <span class="badge gold">${ex.duration} mins</span>
             ${hasCode ? `<span class="badge" style="background:rgba(220,38,38,.1);color:var(--danger);border-color:rgba(220,38,38,.2);">🔐 Code Required</span>` : ''}
+            ${ex.pool_size && ex.pool_size < (ex.questions_data||[]).length ? `<span class="badge" style="background:rgba(200,155,0,.1);color:var(--accent);">🎲 ${ex.pool_size} from ${(ex.questions_data||[]).length}</span>` : ''}
           </div>
         </div>
         <button class="btn btn-primary" style="flex-shrink:0;" onclick="openInstructions('${ex.id}')">Start →</button>
@@ -1528,12 +2344,47 @@ function verifyAccessCode() {
 
 function loadInstructions(ex) {
   state.exam = ex;
-  document.getElementById('instr-title').textContent = ex.name;
+  const totalInBank = ex.questions_data ? ex.questions_data.length : ex.questions;
+  const poolSize    = ex.pool_size && ex.pool_size < totalInBank ? ex.pool_size : totalInBank;
+
+  document.getElementById('instr-title').textContent    = ex.name;
   document.getElementById('instr-subtitle').textContent = ex.subject;
-  document.getElementById('instr-q-count').textContent = ex.questions;
-  document.getElementById('instr-time').textContent = ex.duration;
-  document.getElementById('instr-li-time').innerHTML = `You have <strong>${ex.duration} minutes</strong> to complete <strong>${ex.questions} questions</strong>.`;
+  document.getElementById('instr-q-count').textContent  = poolSize;
+  document.getElementById('instr-time').textContent     = ex.duration;
+  document.getElementById('instr-li-time').innerHTML    = `You have <strong>${ex.duration} minutes</strong> to complete <strong>${poolSize} questions</strong>.`;
+
+  // Show pool notice if applicable
+  const poolNotice = document.getElementById('instr-pool-notice');
+  if (poolNotice) {
+    if (ex.pool_size && ex.pool_size < totalInBank) {
+      poolNotice.style.display = '';
+      poolNotice.innerHTML = `🎲 <strong>${poolSize} questions</strong> will be randomly selected from a bank of <strong>${totalInBank}</strong> — every attempt is different!`;
+    } else {
+      poolNotice.style.display = 'none';
+    }
+  }
   showScreen('instructions');
+}
+
+// ============================
+// SHUFFLE UTILITY
+// ============================
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function shuffleQuestionOptions(q) {
+  // Create index map [0,1,2,3] and shuffle it
+  const indices = shuffle([0, 1, 2, 3]);
+  const newOpts = indices.map(i => q.opts[i]);
+  // Find where the correct answer ended up
+  const newAns = indices.indexOf(q.ans);
+  return { ...q, opts: newOpts, ans: newAns };
 }
 
 // ============================
@@ -1541,18 +2392,50 @@ function loadInstructions(ex) {
 // ============================
 function beginTest() {
   const ex = state.exam;
-  state.answers = new Array(ex.questions_data.length).fill(null);
-  state.marks = new Array(ex.questions_data.length).fill(false);
-  state.currentQ = 0;
-  state.secondsLeft = ex.duration * 60;
-  state.startTime = Date.now();
 
-  document.getElementById('exam-title-bar').textContent = ex.name;
+  // Check for saved draft first
+  const draft = checkForDraft(ex.id);
+  if (draft && draft.shuffledQuestions && draft.shuffledQuestions.length) {
+    // Restore draft
+    restoreDraft(draft);
+    document.getElementById('exam-title-bar').textContent   = ex.name;
+    document.getElementById('exam-student-bar').textContent = state.user.name;
+    buildPalette();
+    renderQuestion();
+    updateViolationDots();
+    startTimer();
+    startAutoSave();
+    initAntiCheat();
+    showScreen('exam');
+    toast('📂 Resuming your previous session...');
+    return;
+  }
+
+  // Fresh start — apply question pool
+  let pool = [...ex.questions_data];
+  if (ex.pool_size && ex.pool_size > 0 && ex.pool_size < pool.length) {
+    pool = shuffle(pool).slice(0, ex.pool_size);
+  }
+
+  // Shuffle question order then shuffle each question's options
+  const shuffled = shuffle(pool).map(q => shuffleQuestionOptions(q));
+  state.shuffledQuestions = shuffled;
+
+  state.answers     = new Array(shuffled.length).fill(null);
+  state.marks       = new Array(shuffled.length).fill(false);
+  state.currentQ    = 0;
+  state.violations  = 0;
+  state.secondsLeft = ex.duration * 60;
+  state.startTime   = Date.now();
+
+  document.getElementById('exam-title-bar').textContent   = ex.name;
   document.getElementById('exam-student-bar').textContent = state.user.name;
 
   buildPalette();
   renderQuestion();
   startTimer();
+  startAutoSave();
+  initAntiCheat();
   showScreen('exam');
 }
 
@@ -1560,13 +2443,13 @@ function beginTest() {
 // RENDER QUESTION
 // ============================
 function renderQuestion() {
-  const q = state.exam.questions_data[state.currentQ];
-  const total = state.exam.questions_data.length;
+  const q     = state.shuffledQuestions[state.currentQ];
+  const total = state.shuffledQuestions.length;
   document.getElementById('q-current').textContent = state.currentQ + 1;
-  document.getElementById('q-total').textContent = total;
-  document.getElementById('q-text').textContent = q.q;
+  document.getElementById('q-total').textContent   = total;
+  document.getElementById('q-text').textContent    = q.q;
 
-  const opts = document.getElementById('options-container');
+  const opts   = document.getElementById('options-container');
   opts.innerHTML = '';
   const labels = ['A', 'B', 'C', 'D'];
   q.opts.forEach((opt, i) => {
@@ -1585,8 +2468,8 @@ function renderQuestion() {
   // Nav buttons
   document.getElementById('btn-prev').disabled = state.currentQ === 0;
   const isLast = state.currentQ === total - 1;
-  document.getElementById('btn-next').style.display = isLast ? 'none' : '';
-  document.getElementById('btn-submit-q').style.display = isLast ? '' : 'none';
+  document.getElementById('btn-next').style.display      = isLast ? 'none' : '';
+  document.getElementById('btn-submit-q').style.display  = isLast ? '' : 'none';
 
   updatePalette();
 }
@@ -1594,6 +2477,9 @@ function renderQuestion() {
 function selectAnswer(i) {
   state.answers[state.currentQ] = i;
   renderQuestion();
+  // Save immediately when answer selected (debounced)
+  clearTimeout(state._saveTimeout);
+  state._saveTimeout = setTimeout(doAutoSave, 1500);
 }
 
 function toggleMark() {
@@ -1606,7 +2492,7 @@ function prevQ() {
 }
 
 function nextQ() {
-  if (state.currentQ < state.exam.questions_data.length - 1) { state.currentQ++; renderQuestion(); }
+  if (state.currentQ < state.shuffledQuestions.length - 1) { state.currentQ++; renderQuestion(); }
 }
 
 // ============================
@@ -1615,7 +2501,7 @@ function nextQ() {
 function buildPalette() {
   const grid = document.getElementById('palette-grid');
   grid.innerHTML = '';
-  state.exam.questions_data.forEach((_, i) => {
+  state.shuffledQuestions.forEach((_, i) => {
     const btn = document.createElement('button');
     btn.className = 'palette-btn';
     btn.textContent = i + 1;
@@ -1632,6 +2518,158 @@ function updatePalette() {
     else if (state.marks[i]) btn.classList.add('review');
     else if (state.answers[i] !== null) btn.classList.add('answered');
   });
+}
+
+// ============================
+// AUTO-SAVE SYSTEM
+// ============================
+const DRAFT_KEY_PREFIX = 'bbc_draft_';
+
+function getAutoSaveKey() {
+  return DRAFT_KEY_PREFIX + state.user.id + '_' + state.exam.id;
+}
+
+function startAutoSave() {
+  state.autoSaveKey = getAutoSaveKey();
+  // Save immediately then every 30 seconds
+  doAutoSave();
+  state.autoSaveInterval = setInterval(doAutoSave, 30000);
+}
+
+function stopAutoSave() {
+  clearInterval(state.autoSaveInterval);
+  state.autoSaveInterval = null;
+  // Clear draft after submission
+  if (state.autoSaveKey) {
+    localStorage.removeItem(state.autoSaveKey);
+    state.autoSaveKey = null;
+  }
+}
+
+function doAutoSave() {
+  if (!state.exam || !state.user) return;
+  const draft = {
+    examId:            state.exam.id,
+    answers:           state.answers,
+    marks:             state.marks,
+    currentQ:          state.currentQ,
+    secondsLeft:       state.secondsLeft,
+    violations:        state.violations,
+    shuffledQuestions: state.shuffledQuestions,
+    savedAt:           Date.now()
+  };
+  try {
+    localStorage.setItem(getAutoSaveKey(), JSON.stringify(draft));
+    showAutoSaveIndicator('✅ Saved', '#16a34a');
+    state.lastSaved = Date.now();
+  } catch(e) {
+    showAutoSaveIndicator('⚠️ Save failed', '#dc2626');
+  }
+}
+
+function showAutoSaveIndicator(text, color) {
+  const ind  = document.getElementById('autosave-indicator');
+  const span = document.getElementById('autosave-text');
+  if (!ind || !span) return;
+  ind.style.display = 'block';
+  span.textContent  = text;
+  span.style.color  = color;
+}
+
+function checkForDraft(examId) {
+  if (!state.user) return null;
+  const key   = DRAFT_KEY_PREFIX + state.user.id + '_' + examId;
+  const draft = localStorage.getItem(key);
+  if (!draft) return null;
+  try {
+    const parsed = JSON.parse(draft);
+    // Only valid if saved within the last 2 hours
+    if (Date.now() - parsed.savedAt > 2 * 60 * 60 * 1000) {
+      localStorage.removeItem(key);
+      return null;
+    }
+    return parsed;
+  } catch(e) { return null; }
+}
+
+function restoreDraft(draft) {
+  state.answers           = draft.answers;
+  state.marks             = draft.marks;
+  state.currentQ          = draft.currentQ;
+  state.secondsLeft       = draft.secondsLeft;
+  state.violations        = draft.violations || 0;
+  state.shuffledQuestions = draft.shuffledQuestions;
+}
+
+// ============================
+// ANTI-CHEAT — TAB SWITCH DETECTION
+// ============================
+const MAX_VIOLATIONS = 3;
+
+function initAntiCheat() {
+  state.violations = 0;
+  updateViolationDots();
+
+  // Listen for tab switch / minimize
+  document.addEventListener('visibilitychange', handleVisibilityChange);
+  window.addEventListener('blur', handleWindowBlur);
+}
+
+function cleanupAntiCheat() {
+  document.removeEventListener('visibilitychange', handleVisibilityChange);
+  window.removeEventListener('blur', handleWindowBlur);
+}
+
+function handleVisibilityChange() {
+  if (document.hidden && isExamActive()) {
+    registerViolation('tab switch');
+  }
+}
+
+function handleWindowBlur() {
+  if (isExamActive()) {
+    registerViolation('window focus lost');
+  }
+}
+
+function isExamActive() {
+  return document.getElementById('screen-exam').classList.contains('active');
+}
+
+function registerViolation(reason) {
+  if (!isExamActive()) return;
+  state.violations++;
+  updateViolationDots();
+
+  const remaining = MAX_VIOLATIONS - state.violations;
+  const banner = document.getElementById('violation-banner');
+  const msg    = document.getElementById('violation-msg');
+  banner.style.display = 'block';
+
+  if (state.violations >= MAX_VIOLATIONS) {
+    msg.textContent = '🚨 Maximum violations reached! Submitting your exam automatically...';
+    cleanupAntiCheat();
+    setTimeout(() => {
+      const timeUsed = Math.round((Date.now() - state.startTime) / 1000);
+      clearInterval(state.timerInterval);
+      calcResults(timeUsed);
+    }, 2000);
+  } else {
+    msg.textContent = `⚠️ Warning ${state.violations}/${MAX_VIOLATIONS}: Do not leave the exam! ${remaining} warning${remaining !== 1 ? 's' : ''} left before auto-submit.`;
+    // Hide banner after 4 seconds
+    setTimeout(() => { if (banner) banner.style.display = 'none'; }, 4000);
+  }
+}
+
+function updateViolationDots() {
+  const dots = document.getElementById('violation-dots');
+  if (!dots) return;
+  dots.innerHTML = '';
+  for (let i = 0; i < MAX_VIOLATIONS; i++) {
+    const d = document.createElement('div');
+    d.className = 'v-dot' + (i < state.violations ? ' filled' : '');
+    dots.appendChild(d);
+  }
 }
 
 // ============================
@@ -1697,7 +2735,9 @@ function submitExam() {
 }
 
 async function calcResults(timeUsed) {
-  const qs = state.exam.questions_data;
+  cleanupAntiCheat();
+  stopAutoSave();
+  const qs = state.shuffledQuestions;
   let correct = 0;
   qs.forEach((q, i) => { if (state.answers[i] === q.ans) correct++; });
   const wrong   = qs.filter((q, i) => state.answers[i] !== null && state.answers[i] !== q.ans).length;
@@ -1715,6 +2755,7 @@ async function calcResults(timeUsed) {
     pct,
     answers:       state.answers,
     time_used:     timeUsed,
+    violations:    state.violations,
     date:          new Date().toISOString()
   });
 
@@ -1799,7 +2840,7 @@ function showResults({ correct, wrong, skipped, pct, total }) {
 }
 
 function buildReview() {
-  const qs = state.exam.questions_data;
+  const qs = state.shuffledQuestions; // use shuffled version with correct ans positions
   const labels = ['A','B','C','D'];
   const container = document.getElementById('review-container');
   container.innerHTML = '';
@@ -1814,10 +2855,10 @@ function buildReview() {
     }).join('');
     container.innerHTML += `
       <div class="review-q">
-        <div class="review-q-num">Q${i+1} · ${userAns === null ? '<span style="color:var(--warn)">Not Attempted</span>' : userAns === q.ans ? '<span style="color:var(--success)">Correct</span>' : '<span style="color:var(--danger)">Incorrect</span>'}</div>
+        <div class="review-q-num">Q${i+1} · ${userAns === null ? '<span style="color:var(--warn)">Not Attempted</span>' : userAns === q.ans ? '<span style="color:var(--success)">Correct ✓</span>' : '<span style="color:var(--danger)">Incorrect ✗</span>'}</div>
         <div class="review-q-text">${q.q}</div>
         <div class="review-options">${optsHtml}</div>
-        <div class="explanation"><strong>Explanation:</strong> ${q.exp}</div>
+        ${q.exp ? `<div class="explanation"><strong>💡 Explanation:</strong> ${q.exp}</div>` : ''}
       </div>`;
   });
 }
@@ -1857,6 +2898,45 @@ window.addEventListener('beforeunload', (e) => {
     e.returnValue = '';
   }
 });
+
+// ============================
+// DARK MODE
+// ============================
+const DARK_KEY = 'bbc_dark_mode';
+
+function initDarkMode() {
+  const saved = localStorage.getItem(DARK_KEY);
+  if (saved === 'true') {
+    document.body.classList.add('dark');
+    updateDarkToggleUI(true);
+  }
+}
+
+function toggleDarkMode() {
+  const isDark = document.body.classList.toggle('dark');
+  localStorage.setItem(DARK_KEY, isDark);
+  updateDarkToggleUI(isDark);
+}
+
+function updateDarkToggleUI(isDark) {
+  // Update all toggle buttons
+  document.querySelectorAll('.dark-toggle').forEach(btn => {
+    const icon  = btn.querySelector('[id*="dark-toggle-icon"]');
+    const label = btn.querySelector('[id*="dark-toggle-label"]');
+    if (icon)  icon.textContent  = isDark ? '☀️' : '🌙';
+    if (label) label.textContent = isDark ? 'Light' : 'Dark';
+  });
+  // Also update login icon if present
+  const loginIcon = document.getElementById('dark-toggle-icon-login');
+  if (loginIcon) loginIcon.textContent = isDark ? '☀️' : '🌙';
+  const dashIcon = document.getElementById('dark-toggle-icon');
+  if (dashIcon) dashIcon.textContent = isDark ? '☀️' : '🌙';
+  const dashLabel = document.getElementById('dark-toggle-label');
+  if (dashLabel) dashLabel.textContent = isDark ? 'Light' : 'Dark';
+}
+
+// Run dark mode on page load
+initDarkMode();
 
 // Enter key support for auth screens
 document.addEventListener('keydown', e => {
